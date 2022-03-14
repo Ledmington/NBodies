@@ -1,0 +1,14 @@
+Add a simple GUI menu when starting that lets you choose:
+ - number of bodies
+ - number of steps
+ - delta time
+ - friction constant
+ - other simulation data
+
+Add FPS counter in the GUI
+
+Measure computation time of each frame and show: min, max and avg
+
+Compute and show total sum of velocities (to see if the simulation is converging or not)
+
+Knowing total number of steps and "current" execution time, compute and show ETA
