@@ -19,3 +19,5 @@ Make the GUI resizable
 Add more navigation commands:
  - mouse pointer to move (drag and drop) and mouse wheel to zoom
  - +/- to zoom and arrows to move
+
+Measure performance

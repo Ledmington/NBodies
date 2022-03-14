@@ -14,9 +14,9 @@ public class VisualiserFrame extends JFrame {
 
 	public VisualiserFrame(int w, int h){
 		setTitle("N-Bodies Simulation");
-		setSize(w,h);
+		setSize(w, h);
 		setResizable(false);
-		panel = new VisualiserPanel(w,h);
+		panel = new VisualiserPanel(w, h);
 		getContentPane().add(panel);
 		addWindowListener(new WindowAdapter(){
 			public void windowClosing(WindowEvent ev){

@@ -8,7 +8,7 @@ package nbodies.seq;
 public class Body {
     
 	private static final double REPULSIVE_CONST = 0.01;
-	private static final double FRICTION_CONST = 1;
+	private static final double FRICTION_CONST = 10;
 	
     private final P2d pos;
     private final V2d vel;
@@ -39,6 +39,7 @@ public class Body {
     }
     
     public boolean equals(Object b) {
+		if(b.getClass() != Body.class) return false;
     	return ((Body)b).id == id;
     }
     
@@ -115,28 +116,26 @@ public class Body {
     }
     
     /**
-     * Check if there collisions with the boundaty and update the
+     * Check if there are collisions with the boundary and update the
      * position and velocity accordingly
      * 
      * @param bounds
      */
     public void checkAndSolveBoundaryCollision(Boundary bounds){
     	double x = pos.getX();
-    	double y = pos.getY();    	
-        if (x > bounds.getX1()){
-            pos.change(bounds.getX1(), pos.getY());
+    	double y = pos.getY();
+        if (x > bounds.getXMax()){
+            pos.change(bounds.getXMax(), pos.getY());
             vel.change(-vel.getX(), vel.getY());
-        } else if (x < bounds.getX0()){
-            pos.change(bounds.getX0(), pos.getY());
+        } else if (x < bounds.getXMin()){
+            pos.change(bounds.getXMin(), pos.getY());
             vel.change(-vel.getX(), vel.getY());
-        } else if (y > bounds.getY1()){
-            pos.change(pos.getX(), bounds.getY1());
+        } else if (y > bounds.getYMax()){
+            pos.change(pos.getX(), bounds.getYMax());
             vel.change(vel.getX(), -vel.getY());
-        } else if (y < bounds.getY0()){
-            pos.change(pos.getX(), bounds.getY0());
+        } else if (y < bounds.getYMin()){
+            pos.change(pos.getX(), bounds.getYMin());
             vel.change(vel.getX(), -vel.getY());
         }
-    }        
-    
-
+    }
 }

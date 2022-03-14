@@ -11,7 +11,7 @@ public class SequentialBodySimulationMain {
 
     public static void main(String[] args) {
                 
-    	SimulationView viewer = new SimulationView(620,620);
+    	SimulationView viewer = new SimulationView(800, 800);
 
     	Simulator sim = new Simulator(viewer);
         sim.execute(50000);

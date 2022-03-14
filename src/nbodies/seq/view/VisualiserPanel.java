@@ -43,11 +43,11 @@ public class VisualiserPanel extends JPanel implements KeyListener {
 			g2.clearRect(0,0,this.getWidth(),this.getHeight());
 
 
-			int x0 = getXcoord(bounds.getX0());
-			int y0 = getYcoord(bounds.getY0());
+			int x0 = getXcoord(bounds.getXMin());
+			int y0 = getYcoord(bounds.getYMin());
 
-			int wd = getXcoord(bounds.getX1()) - x0;
-			int ht = y0 - getYcoord(bounds.getY1());
+			int wd = getXcoord(bounds.getXMax()) - x0;
+			int ht = y0 - getYcoord(bounds.getYMax());
 
 			g2.drawRect(x0, y0 - ht, wd, ht);
 

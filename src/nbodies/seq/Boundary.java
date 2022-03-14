@@ -5,32 +5,33 @@ package nbodies.seq;
  *
  */
 public class Boundary {
-	private double x0;
-	private double y0;
-	private double x1;
-	private double y1;
+
+	private final double xMin;
+	private final double yMin;
+	private final double xMax;
+	private final double yMax;
 
 	public Boundary(double x0, double y0, double x1, double y1){
-		this.x0=x0;
-		this.y0=y0;
-		this.x1=x1;
-		this.y1=y1;
+		this.xMin = x0;
+		this.yMin = y0;
+		this.xMax = x1;
+		this.yMax = y1;
 	}
 
-	public double getX0(){
-		return x0;
+	public double getXMin(){
+		return xMin;
 	}
 
-	public double getX1(){
-		return x1;
+	public double getXMax(){
+		return xMax;
 	}
 
-	public double getY0(){
-		return y0;
+	public double getYMin(){
+		return yMin;
 	}
 
-	public double getY1(){
-		return y1;
+	public double getYMax(){
+		return yMax;
 	}
 
 }

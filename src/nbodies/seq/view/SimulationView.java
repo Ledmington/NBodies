@@ -31,7 +31,7 @@ public class SimulationView {
      * @param h
      */
     public SimulationView(int w, int h){
-    	frame = new VisualiserFrame(w,h);
+    	frame = new VisualiserFrame(w, h);
     }
         
     public void display(ArrayList<Body> bodies, double vt, long iter, Boundary bounds){
