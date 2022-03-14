@@ -12,16 +12,18 @@ Il programma è sequenziale, non strutturato. L’algoritmo che definisce il com
 ```
 vt = 0; // virtual time
 dt = 0.01; // time increment at each iteration
+
 loop {
-	For each body b[i]:
-	compute total force exerted by other bodies b[j] and friction
-	compute the instant acceleration, given the total force and mass
-	update body velocity, given the acceleration and the virtual
-	time elapsed dt
-	Update bodies positions, given the velocity and virtual time elapsed dt
-	Check boundary collisions;
+	for each body b[i]:
+        compute total force exerted by other bodies b[j] and friction
+        compute the instant acceleration, given the total force and mass
+        update body velocity, given the acceleration and the virtual time elapsed dt
+        update bodies positions, given the velocity and virtual time elapsed dt
+	
+	check boundary collisions;
 	vt = vt + dt;
-	Display current stage;
+	
+	display current stage;
 }
 ```
 La semplice GUI fornita nel programma semplicemente visualizza l’andamento della simulazione (con i tasti UP and DOWN è possibile fare zoom in e out).
