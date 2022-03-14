@@ -1,4 +1,5 @@
 Add a simple GUI menu when starting that lets you choose:
+ - number of threads
  - number of bodies
  - number of steps
  - delta time
@@ -12,3 +13,9 @@ Measure computation time of each frame and show: min, max and avg
 Compute and show total sum of velocities (to see if the simulation is converging or not)
 
 Knowing total number of steps and "current" execution time, compute and show ETA
+
+Make the GUI resizable
+
+Add more navigation commands:
+ - mouse pointer to move (drag and drop) and mouse wheel to zoom
+ - +/- to zoom and arrows to move

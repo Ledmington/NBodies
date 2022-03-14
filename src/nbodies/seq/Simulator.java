@@ -1,5 +1,7 @@
 package nbodies.seq;
 
+import nbodies.seq.view.SimulationView;
+
 import java.util.*;
 
 public class Simulator {

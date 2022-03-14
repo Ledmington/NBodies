@@ -1,5 +1,7 @@
 package nbodies.seq;
 
+import nbodies.seq.view.SimulationView;
+
 /**
  * Bodies simulation - legacy code: sequential, unstructured
  * 
