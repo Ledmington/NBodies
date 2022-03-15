@@ -11,18 +11,18 @@ import static java.lang.Integer.*;
  * 
  * @author aricci
  */
-public class SequentialBodySimulationMain {
+public class NBodies {
 
     public static void main(String[] args) {
 
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		int width = (int) screenSize.getWidth();
 		int height = (int) screenSize.getHeight();
-		int size = min(width, height) - 30;
+		int size = min(width, height) - 50;
                 
     	SimulationView viewer = new SimulationView(size, size);
 
-    	Simulator sim = new Simulator(viewer);
+    	Simulator sim = new SequentialSimulator(viewer);
         sim.execute(50000);
     }
 }
