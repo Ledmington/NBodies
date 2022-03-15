@@ -8,10 +8,9 @@ public class MovingArrowsListener implements KeyListener {
 	private double scale = 1;
 
 	public void keyPressed(KeyEvent e) {
-		if (e.getKeyCode() == 38){  		/* KEY UP */
-			scale *= 1.1;
-		} else if (e.getKeyCode() == 40){  	/* KEY DOWN */
-			scale *= 0.9;
+		switch (e.getKeyCode()) {
+			case KeyEvent.VK_UP -> scale *= 1.1;
+			case KeyEvent.VK_DOWN -> scale *= 0.9;
 		}
 	}
 
