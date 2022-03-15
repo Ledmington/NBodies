@@ -1,8 +1,8 @@
-package nbodies.seq.view;
+package nbodies.view;
 
-import nbodies.seq.Body;
-import nbodies.seq.Boundary;
-import nbodies.seq.P2d;
+import nbodies.Body;
+import nbodies.Boundary;
+import nbodies.P2d;
 
 import javax.swing.*;
 import java.awt.*;

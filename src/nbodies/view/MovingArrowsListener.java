@@ -1,4 +1,4 @@
-package nbodies.seq.view;
+package nbodies.view;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;

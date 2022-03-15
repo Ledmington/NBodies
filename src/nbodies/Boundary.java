@@ -1,4 +1,4 @@
-package nbodies.seq;
+package nbodies;
 
 /**
  * Boundary of the field where bodies move. 

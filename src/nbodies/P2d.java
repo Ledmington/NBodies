@@ -1,4 +1,4 @@
-package nbodies.seq;
+package nbodies;
 
 public class P2d { 
 

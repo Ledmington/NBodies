@@ -1,7 +1,7 @@
-package nbodies.seq.view;
+package nbodies.view;
 
-import nbodies.seq.Body;
-import nbodies.seq.Boundary;
+import nbodies.Body;
+import nbodies.Boundary;
 
 import java.util.ArrayList;
 

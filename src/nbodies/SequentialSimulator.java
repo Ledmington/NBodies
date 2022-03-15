@@ -1,6 +1,6 @@
-package nbodies.seq;
+package nbodies;
 
-import nbodies.seq.view.SimulationView;
+import nbodies.view.SimulationView;
 
 import java.util.ArrayList;
 import java.util.Random;
