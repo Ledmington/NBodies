@@ -84,6 +84,10 @@ public class SequentialSimulator implements Simulator {
 		}
 	}
 
+	public void stop() {
+		bodies.clear();
+	}
+
 	private V2d computeTotalForceOnBody(Body b) {
 
 		V2d totalForce = new V2d(0, 0);

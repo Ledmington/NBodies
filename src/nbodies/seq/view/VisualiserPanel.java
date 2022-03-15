@@ -57,7 +57,7 @@ public class VisualiserPanel extends JPanel implements KeyListener {
 				if (radius < 1) {
 					radius = 1;
 				}
-				g2.drawOval(getXcoord(p.getX()),getYcoord(p.getY()), radius, radius);
+				g2.drawOval(getXcoord(p.getX()), getYcoord(p.getY()), radius, radius);
 			});
 			String time = String.format("%.2f", vt);
 			g2.drawString("Bodies: " + bodies.size() + " - vt: " + time + " - nIter: " + nIter + " (UP for zoom in, DOWN for zoom out)", 2, 20);

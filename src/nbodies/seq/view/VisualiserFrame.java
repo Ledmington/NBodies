@@ -16,8 +16,21 @@ public class VisualiserFrame extends JFrame {
 		setSize(w, h);
 		setMinimumSize(new Dimension(w, h));
 		setResizable(false);
+
+		setLayout(new BorderLayout());
+
 		panel = new VisualiserPanel(w, h);
-		getContentPane().add(panel);
+		getContentPane().add(panel, BorderLayout.CENTER);
+
+		JPanel topBar = new JPanel();
+
+		JButton startButton = new JButton("Start");
+		topBar.add(startButton);
+		JButton stopButton = new JButton("Stop");
+		topBar.add(stopButton);
+
+		getContentPane().add(topBar, BorderLayout.NORTH);
+
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setVisible(true);
 		this.pack();
