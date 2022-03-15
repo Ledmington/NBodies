@@ -2,7 +2,8 @@ package nbodies.seq;
 
 import nbodies.seq.view.SimulationView;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Random;
 
 public class SequentialSimulator implements Simulator {
 

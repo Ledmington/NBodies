@@ -4,8 +4,7 @@ import nbodies.seq.Body;
 import nbodies.seq.Boundary;
 
 import javax.swing.*;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.*;
 import java.util.ArrayList;
 
 public class VisualiserFrame extends JFrame {
@@ -15,18 +14,13 @@ public class VisualiserFrame extends JFrame {
 	public VisualiserFrame(int w, int h){
 		setTitle("N-Bodies Simulation");
 		setSize(w, h);
+		setMinimumSize(new Dimension(w, h));
 		setResizable(false);
 		panel = new VisualiserPanel(w, h);
 		getContentPane().add(panel);
-		addWindowListener(new WindowAdapter(){
-			public void windowClosing(WindowEvent ev){
-				System.exit(-1);
-			}
-			public void windowClosed(WindowEvent ev){
-				System.exit(-1);
-			}
-		});
+		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setVisible(true);
+		this.pack();
 	}
 
 	public void display(ArrayList<Body> bodies, double vt, long iter, Boundary bounds){
