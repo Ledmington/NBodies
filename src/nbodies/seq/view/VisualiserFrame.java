@@ -16,10 +16,14 @@ public class VisualiserFrame extends JFrame {
 		setSize(w, h);
 		setMinimumSize(new Dimension(w, h));
 		setResizable(false);
+		setFocusable(true);
+
+		MovingArrowsListener listener = new MovingArrowsListener();
+		addKeyListener(listener);
 
 		setLayout(new BorderLayout());
 
-		panel = new VisualiserPanel(w, h);
+		panel = new VisualiserPanel(w, h, listener);
 		getContentPane().add(panel, BorderLayout.CENTER);
 
 		JPanel topBar = new JPanel();

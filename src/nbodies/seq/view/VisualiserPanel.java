@@ -6,30 +6,32 @@ import nbodies.seq.P2d;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
-public class VisualiserPanel extends JPanel implements KeyListener {
+public class VisualiserPanel extends JPanel {
 
 	private ArrayList<Body> bodies;
 	private Boundary bounds;
+	private final MovingArrowsListener listener;
 
 	private long nIter;
 	private double vt;
-	private double scale = 1;
 
 	private final long dx;
 	private final long dy;
 
-	public VisualiserPanel(int w, int h){
+	public VisualiserPanel(int w, int h, MovingArrowsListener listener){
 		setSize(w,h);
 		dx = w/2 - 20;
 		dy = h/2 - 20;
-		this.addKeyListener(this);
+		this.listener = listener;
 		setFocusable(true);
 		setFocusTraversalKeysEnabled(false);
 		requestFocusInWindow();
+	}
+	
+	private double getScale() {
+		return listener.getScale();
 	}
 
 	public void paint(Graphics g){
@@ -40,7 +42,7 @@ public class VisualiserPanel extends JPanel implements KeyListener {
 					RenderingHints.VALUE_ANTIALIAS_ON);
 			g2.setRenderingHint(RenderingHints.KEY_RENDERING,
 					RenderingHints.VALUE_RENDER_QUALITY);
-			g2.clearRect(0,0,this.getWidth(),this.getHeight());
+			g2.clearRect(0, 0, this.getWidth(), this.getHeight());
 
 
 			int x0 = getXcoord(bounds.getXMin());
@@ -53,7 +55,7 @@ public class VisualiserPanel extends JPanel implements KeyListener {
 
 			bodies.forEach( b -> {
 				P2d p = b.getPos();
-				int radius = (int) (10*scale);
+				int radius = (int) (10*getScale());
 				if (radius < 1) {
 					radius = 1;
 				}
@@ -65,11 +67,11 @@ public class VisualiserPanel extends JPanel implements KeyListener {
 	}
 
 	private int getXcoord(double x) {
-		return (int)(dx + x*dx*scale);
+		return (int)(dx + x*dx*getScale());
 	}
 
 	private int getYcoord(double y) {
-		return (int)(dy - y*dy*scale);
+		return (int)(dy - y*dy*getScale());
 	}
 
 	public void display(ArrayList<Body> bodies, double vt, long iter, Boundary bounds){
@@ -78,16 +80,4 @@ public class VisualiserPanel extends JPanel implements KeyListener {
 		this.vt = vt;
 		this.nIter = iter;
 	}
-
-	@Override
-	public void keyPressed(KeyEvent e) {
-		if (e.getKeyCode() == 38){  		/* KEY UP */
-			scale *= 1.1;
-		} else if (e.getKeyCode() == 40){  	/* KEY DOWN */
-			scale *= 0.9;
-		}
-	}
-
-	public void keyReleased(KeyEvent e) {}
-	public void keyTyped(KeyEvent e) {}
 }

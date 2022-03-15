@@ -17,9 +17,6 @@ public class SimulationView {
 	
     /**
      * Creates a view of the specified size (in pixels)
-     * 
-     * @param w
-     * @param h
      */
     public SimulationView(int w, int h){
     	frame = new VisualiserFrame(w, h);
