@@ -4,9 +4,9 @@ Link to the actual assignment [here](https://docs.google.com/document/d/1B-ml9PS
 
 ## PCD Assignment #01 - v 1.0-20220314
 
-Nel repository del corso (package pcd.ass01.seq) è fornito il codice di un programma che simula il movimento di N corpi su un piano bidimensionale, soggetti a due tipi di forze:
--   una forza repulsiva, per cui ogni corpo bi esercita su ogni altro corpo bj una forza in modulo pari a: Fij = krep * mi / dij2 , dove mi è la massa del corpo bi, krep è una costante data, dij è la distanza fra i due corpi. La direzione della forza è data dal versore (bj - bi) – ovvero respingente per il corpo bj.
--   una forza di attrito, per cui su ogni corpo bi che si muove ad una velocità vi è esercitata una forza FRi = - kfri* vi che si oppone al moto, quindi in direzione opposta alla sua velocità, dove kfri è una costante data.
+Nel repository del corso (package `pcd.ass01.seq`) è fornito il codice di un programma che simula il movimento di N corpi su un piano bidimensionale, soggetti a due tipi di forze:
+-   una forza repulsiva, per cui ogni corpo ![formula](https://render.githubusercontent.com/render/math?math=\color{white}b_i) esercita su ogni altro corpo ![formula](https://render.githubusercontent.com/render/math?math=\color{white}b_j) una forza in modulo pari a: ![formula](https://render.githubusercontent.com/render/math?math=\color{white}F_{ij}=K_{rep}\cdot\dfrac{m_i}{d_{ij}^2}), dove ![formula](https://render.githubusercontent.com/render/math?math=\color{white}m_i) è la massa del corpo ![formula](https://render.githubusercontent.com/render/math?math=\color{white}b_i), ![formula](https://render.githubusercontent.com/render/math?math=\color{white}K_{rep}) è una costante data, ![formula](https://render.githubusercontent.com/render/math?math=\color{white}d_{ij}) è la distanza fra i due corpi. La direzione della forza è data dal versore ![formula](https://render.githubusercontent.com/render/math?math=\color{white}(b_j-b_i)) – ovvero respingente per il corpo ![formula](https://render.githubusercontent.com/render/math?math=\color{white}b_j).
+-   una forza di attrito, per cui su ogni corpo ![formula](https://render.githubusercontent.com/render/math?math=\color{white}b_i) che si muove ad una velocità ![formula](https://render.githubusercontent.com/render/math?math=\color{white}v_i) è esercitata una forza ![formula](https://render.githubusercontent.com/render/math?math=\color{white}FR_i=-K_{fri}\cdot{v_i}) che si oppone al moto, quindi in direzione opposta alla sua velocità, dove ![formula](https://render.githubusercontent.com/render/math?math=\color{white}K_{fri}) è una costante data.
 
 Il programma è sequenziale, non strutturato. L’algoritmo che definisce il comportamento del simulatore - contenuta nella classe `Simulator` - in pseudocodice è il seguente:
 ```
@@ -39,13 +39,19 @@ Alcuni aspetti rilevanti in merito al comportamento del programma e alla natura 
 -   Nel programma, la visualizzazione dello stato corrente della simulazione o frame (via GUI) avviene in modo sincrono, per cui la successiva iterazione avviene solo dopo aver visualizzato lo stato della precedente.
     
 ## CONSEGNA
-1.  Realizzare una versione concorrente della simulazione senza GUI, considerando un insieme iniziale N di corpi - e calcolando l’evoluzione temporale per un certo numero di passi Nsteps - con Nsteps fissato come parametro. Posizione e velocità iniziali possono essere definite in modo casuale. L’obiettivo è:
-1.1. Massimizzare le performance, sfruttando tutte le capacità di calcolo del generico sistema di elaborazione su cui è mandato in esecuzione il programma
-1.2. Organizzare il programma in modo modulare, estendibile.
-1.3. Analizzare le performance del programma considerando valori di N pari a 100, 1000, 5000, con Nsteps pari a 1000, 10000, 50000, calcolando lo speedup, e valutando il suo comportamento usando sia il numero ottimale teorico di thread, sia considerando prove diverse con un numero variabile di threads per verificarne la scalabilità.
-1.4. Usare JPF per verificare la correttezza del programma, considerandone la parte più significativa in merito, opportunamente semplificata.
-1.5. Definire un modello in TLA+/PLUSCAL, identificando le proprietà di correttezza che si ritengono più opportune e verificandole con TLA+ toolbox.
-2.  Estendere la simulazione includendo una GUI con pulsanti start/stop per lanciare/ fermare la simulazione e visualizzare l’andamento, includendo informazioni circa il tempo virtuale. Usare JPF per verificare la correttezza dell’estensione, identificandone un possibile modello che riproduca gli aspetti essenziali della GUI.
+1. Realizzare una versione concorrente della simulazione senza GUI, considerando un insieme iniziale N di corpi - e calcolando l’evoluzione temporale per un certo numero di passi Nsteps - con Nsteps fissato come parametro. Posizione e velocità iniziali possono essere definite in modo casuale. L’obiettivo è:
+
+    1.1. Massimizzare le performance, sfruttando tutte le capacità di calcolo del generico sistema di elaborazione su cui è mandato in esecuzione il programma
+
+    1.2. Organizzare il programma in modo modulare, estendibile.
+
+    1.3. Analizzare le performance del programma considerando valori di N pari a 100, 1000, 5000, con Nsteps pari a 1000, 10000, 50000, calcolando lo speedup, e valutando il suo comportamento usando sia il numero ottimale teorico di thread, sia considerando prove diverse con un numero variabile di threads per verificarne la scalabilità.
+
+    1.4. Usare JPF per verificare la correttezza del programma, considerandone la parte più significativa in merito, opportunamente semplificata.
+
+    1.5. Definire un modello in TLA+/PLUSCAL, identificando le proprietà di correttezza che si ritengono più opportune e verificandole con TLA+ toolbox.
+
+2. Estendere la simulazione includendo una GUI con pulsanti start/stop per lanciare/ fermare la simulazione e visualizzare l’andamento, includendo informazioni circa il tempo virtuale. Usare JPF per verificare la correttezza dell’estensione, identificandone un possibile modello che riproduca gli aspetti essenziali della GUI.
 
 ## VINCOLI
 -   Adottare un approccio basato su programmazione multi-threaded, adottando, da un lato, principi e metodi di progettazione utili per favorire modularità, incapsulamento e proprietà relative, dall’altro una soluzione che massimizzi le performance e reattività.
