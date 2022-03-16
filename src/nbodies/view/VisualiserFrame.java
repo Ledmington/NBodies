@@ -1,7 +1,6 @@
 package nbodies.view;
 
-import nbodies.Body;
-import nbodies.Boundary;
+import nbodies.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -32,6 +31,25 @@ public class VisualiserFrame extends JFrame {
 		topBar.add(startButton);
 		JButton stopButton = new JButton("Stop");
 		topBar.add(stopButton);
+		JLabel statusLabel = new JLabel("Status: ");
+		topBar.add(statusLabel);
+
+		Thread statusUpdaterThread = new Thread(() -> {
+			while(true) {
+				// TODO avoid this null check
+				if(NBodies.getSimulator() != null) {
+					if (NBodies.getSimulator().isRunning()) {
+						statusLabel.setText("Status: running");
+					} else {
+						statusLabel.setText("Status: stopped");
+					}
+				}
+				try {
+					Thread.sleep(100);
+				} catch (InterruptedException ignored) {}
+			}
+		});
+		statusUpdaterThread.start();
 
 		getContentPane().add(topBar, BorderLayout.NORTH);
 

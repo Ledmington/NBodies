@@ -8,6 +8,7 @@ import java.util.Random;
 public class SequentialSimulator implements Simulator {
 
 	private final SimulationView viewer;
+	private Thread mainThread = null;
 
 	/* bodies in the field */
 	ArrayList<Body> bodies;
@@ -33,59 +34,70 @@ public class SequentialSimulator implements Simulator {
 	}
 	
 	public void execute(long nSteps) {
+		if(isRunning()) return;
 
-		/* init virtual time */
+		mainThread = new Thread(() -> {
+			/* init virtual time */
 
-		vt = 0;
-		dt = 0.001;
+			vt = 0;
+			dt = 0.001;
 
-		long iter = 0;
+			long iter = 0;
 
-		/* simulation loop */
+			/* simulation loop */
 
-		while (iter < nSteps) {
+			while (iter < nSteps) {
 
-			/* update bodies velocity */
+				/* update bodies velocity */
 
-			for (int i = 0; i < bodies.size(); i++) {
-				Body b = bodies.get(i);
+				for (int i = 0; i < bodies.size(); i++) {
+					Body b = bodies.get(i);
 
-				/* compute total force on bodies */
-				V2d totalForce = computeTotalForceOnBody(b);
+					/* compute total force on bodies */
+					V2d totalForce = computeTotalForceOnBody(b);
 
-				/* compute instant acceleration */
-				V2d acc = new V2d(totalForce).scalarMul(1.0 / b.getMass());
+					/* compute instant acceleration */
+					V2d acc = new V2d(totalForce).scalarMul(1.0 / b.getMass());
 
-				/* update velocity */
-				b.updateVelocity(acc, dt);
+					/* update velocity */
+					b.updateVelocity(acc, dt);
+				}
+
+				/* compute bodies new pos */
+
+				for (Body b : bodies) {
+					b.updatePos(dt);
+				}
+
+				/* check collisions with boundaries */
+
+				for (Body b : bodies) {
+					b.checkAndSolveBoundaryCollision(bounds);
+				}
+
+				/* update virtual time */
+
+				vt = vt + dt;
+				iter++;
+
+				/* display current stage */
+
+				viewer.display(bodies, vt, iter, bounds);
+
 			}
-
-			/* compute bodies new pos */
-
-			for (Body b : bodies) {
-				b.updatePos(dt);
-			}
-
-			/* check collisions with boundaries */
-
-			for (Body b : bodies) {
-				b.checkAndSolveBoundaryCollision(bounds);
-			}
-
-			/* update virtual time */
-
-			vt = vt + dt;
-			iter++;
-
-			/* display current stage */
-
-			viewer.display(bodies, vt, iter, bounds);
-
-		}
+		});
+		mainThread.start();
 	}
 
 	public void stop() {
+		try {
+			mainThread.join();
+		} catch (InterruptedException ignored) {}
 		bodies.clear();
+	}
+
+	public boolean isRunning() {
+		return mainThread != null;
 	}
 
 	private V2d computeTotalForceOnBody(Body b) {

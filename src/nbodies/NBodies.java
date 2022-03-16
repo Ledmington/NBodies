@@ -13,6 +13,8 @@ import static java.lang.Integer.min;
  */
 public class NBodies {
 
+	private static Simulator sim;
+
     public static void main(String[] args) {
 
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -22,7 +24,11 @@ public class NBodies {
                 
     	SimulationView viewer = new SimulationView(size, size);
 
-    	Simulator sim = new SequentialSimulator(viewer);
+    	sim = new SequentialSimulator(viewer);
         sim.execute(50000);
     }
+
+	public static Simulator getSimulator() {
+		return sim;
+	}
 }
