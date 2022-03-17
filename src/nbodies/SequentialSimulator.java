@@ -30,6 +30,7 @@ public class SequentialSimulator extends AbstractSimulator {
 
 		/* simulation loop */
 		while (iter < nSteps) {
+			System.out.println(iter + " out of " + nSteps);
 
 			/* update bodies velocity */
 			for (Body b : bodies) {
@@ -58,7 +59,7 @@ public class SequentialSimulator extends AbstractSimulator {
 			iter++;
 
 			/* display current stage */
-			viewer.display(bodies, vt, iter, bounds);
+			//viewer.display(bodies, vt, iter, bounds);
 		}
 	}
 

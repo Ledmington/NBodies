@@ -15,6 +15,8 @@ public class ExecutorSimulator extends AbstractSimulator {
 	public ExecutorSimulator(SimulationView viewer) {
 		super(viewer);
 		executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+
+		testBodySet4_many_bodies();
 	}
 
 	public void execute(long nSteps) {
@@ -26,6 +28,7 @@ public class ExecutorSimulator extends AbstractSimulator {
 
 		/* simulation loop */
 		while (iter < nSteps) {
+			System.out.println(iter + " out of " + nSteps);
 
 			Map<Body, Future<V2d>> totalForces = new HashMap<>();
 			for (Body b : bodies) {
@@ -41,30 +44,27 @@ public class ExecutorSimulator extends AbstractSimulator {
 				} catch (InterruptedException | ExecutionException ignored) {}
 			}
 
-			/* compute bodies new pos */
-			bodies.stream()
-					.map(b -> executor.submit(() -> b.updatePos(dt)))
-					.forEach(f -> {
-						try {
-							f.get();
-						} catch (InterruptedException | ExecutionException ignored) {}
-					});
+			List<Future<Void>> tempResult = new LinkedList<>();
+			for (Body b : bodies) {
+				tempResult.add(executor.submit(() -> {
+					b.updatePos(dt);
+					b.checkAndSolveBoundaryCollision(bounds);
+					return null;
+				}));
+			}
 
-			/* check collisions with boundaries */
-			bodies.stream()
-					.map(b -> executor.submit(() -> b.checkAndSolveBoundaryCollision(bounds)))
-					.forEach(f -> {
-						try {
-							f.get();
-						} catch (InterruptedException | ExecutionException ignored) {}
-					});
+			for (Future<Void> f : tempResult) {
+				try {
+					f.get();
+				} catch (InterruptedException | ExecutionException ignored) {}
+			}
 
 			/* update virtual time */
 			vt = vt + dt;
 			iter++;
 
 			/* display current stage */
-			viewer.display(bodies, vt, iter, bounds);
+			//viewer.display(bodies, vt, iter, bounds);
 		}
 	}
 
