@@ -23,6 +23,7 @@ public class NBodies {
     	SimulationView viewer = new SimulationView(size, size);
 
     	Simulator sim = new SequentialSimulator(viewer);
+		//Simulator sim = new ExecutorSimulator(viewer);
         sim.execute(50000);
     }
 }

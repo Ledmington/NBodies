@@ -2,18 +2,7 @@ package nbodies;
 
 import nbodies.view.SimulationView;
 
-import java.util.ArrayList;
-import java.util.Random;
-
-public class SequentialSimulator implements Simulator {
-
-	private final SimulationView viewer;
-
-	/* bodies in the field */
-	ArrayList<Body> bodies;
-
-	/* boundary of the field */
-	private Boundary bounds;
+public class SequentialSimulator extends AbstractSimulator {
 
 	/* virtual time */
 	private double vt;
@@ -22,7 +11,7 @@ public class SequentialSimulator implements Simulator {
 	double dt;
 
 	public SequentialSimulator(SimulationView viewer) {
-		this.viewer = viewer;
+		super(viewer);
 
 		/* initializing boundary and bodies */
 
@@ -33,23 +22,17 @@ public class SequentialSimulator implements Simulator {
 	}
 	
 	public void execute(long nSteps) {
-
 		/* init virtual time */
-
 		vt = 0;
 		dt = 0.001;
 
 		long iter = 0;
 
 		/* simulation loop */
-
 		while (iter < nSteps) {
 
 			/* update bodies velocity */
-
-			for (int i = 0; i < bodies.size(); i++) {
-				Body b = bodies.get(i);
-
+			for (Body b : bodies) {
 				/* compute total force on bodies */
 				V2d totalForce = computeTotalForceOnBody(b);
 
@@ -61,93 +44,25 @@ public class SequentialSimulator implements Simulator {
 			}
 
 			/* compute bodies new pos */
-
 			for (Body b : bodies) {
 				b.updatePos(dt);
 			}
 
 			/* check collisions with boundaries */
-
 			for (Body b : bodies) {
 				b.checkAndSolveBoundaryCollision(bounds);
 			}
 
 			/* update virtual time */
-
 			vt = vt + dt;
 			iter++;
 
 			/* display current stage */
-
 			viewer.display(bodies, vt, iter, bounds);
-
 		}
 	}
 
 	public void stop() {
 		bodies.clear();
-	}
-
-	private V2d computeTotalForceOnBody(Body b) {
-
-		V2d totalForce = new V2d(0, 0);
-
-		/* compute total repulsive force */
-
-		for (Body otherBody : bodies) {
-			if (!b.equals(otherBody)) {
-				try {
-					V2d forceByOtherBody = b.computeRepulsiveForceBy(otherBody);
-					totalForce.sum(forceByOtherBody);
-				} catch (Exception ignored) {
-				}
-			}
-		}
-
-		/* add friction force */
-		totalForce.sum(b.getCurrentFrictionForce());
-
-		return totalForce;
-	}
-	
-	private void testBodySet1_two_bodies() {
-		bounds = new Boundary(-4.0, -4.0, 4.0, 4.0);
-		bodies = new ArrayList<>();
-		bodies.add(new Body(0, new P2d(-0.1, 0), new V2d(0,0), 1));
-		bodies.add(new Body(1, new P2d(0.1, 0), new V2d(0,0), 2));
-	}
-
-	private void testBodySet2_three_bodies() {
-		bounds = new Boundary(-1.0, -1.0, 1.0, 1.0);
-		bodies = new ArrayList<>();
-		bodies.add(new Body(0, new P2d(0, 0), new V2d(0,0), 10));
-		bodies.add(new Body(1, new P2d(0.2, 0), new V2d(0,0), 1));
-		bodies.add(new Body(2, new P2d(-0.2, 0), new V2d(0,0), 1));
-	}
-
-	private void testBodySet3_some_bodies() {
-		bounds = new Boundary(-4.0, -4.0, 4.0, 4.0);
-		int nBodies = 100;
-		Random rand = new Random(System.currentTimeMillis());
-		bodies = new ArrayList<>();
-		for (int i = 0; i < nBodies; i++) {
-			double x = bounds.getXMin()*0.25 + rand.nextDouble() * (bounds.getXMax() - bounds.getXMin()) * 0.25;
-			double y = bounds.getYMin()*0.25 + rand.nextDouble() * (bounds.getYMax() - bounds.getYMin()) * 0.25;
-			Body b = new Body(i, new P2d(x, y), new V2d(0, 0), 10);
-			bodies.add(b);
-		}
-	}
-
-	private void testBodySet4_many_bodies() {
-		bounds = new Boundary(-6.0, -6.0, 6.0, 6.0);
-		int nBodies = 1000;
-		Random rand = new Random(System.currentTimeMillis());
-		bodies = new ArrayList<>();
-		for (int i = 0; i < nBodies; i++) {
-			double x = bounds.getXMin()*0.25 + rand.nextDouble() * (bounds.getXMax() - bounds.getXMin()) * 0.25;
-			double y = bounds.getYMin()*0.25 + rand.nextDouble() * (bounds.getYMax() - bounds.getYMin()) * 0.25;
-			Body b = new Body(i, new P2d(x, y), new V2d(0, 0), 10);
-			bodies.add(b);
-		}
 	}
 }
