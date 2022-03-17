@@ -3,6 +3,7 @@ package nbodies;
 import nbodies.view.SimulationView;
 
 import java.awt.*;
+import java.util.stream.Stream;
 
 import static java.lang.Integer.min;
 

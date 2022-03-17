@@ -3,10 +3,7 @@ package nbodies;
 import nbodies.view.SimulationView;
 
 import java.util.*;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.concurrent.*;
 
 public class ExecutorSimulator extends AbstractSimulator {
 
@@ -64,9 +61,14 @@ public class ExecutorSimulator extends AbstractSimulator {
 			iter++;
 
 			/* display current stage */
-			//viewer.display(bodies, vt, iter, bounds);
+			viewer.display(bodies, vt, iter, bounds);
 		}
 	}
 
-	public void stop() {}
+	public void stop() {
+		executor.shutdown();
+		try {
+			boolean b = executor.awaitTermination(1000_000_000, TimeUnit.SECONDS);
+		} catch (InterruptedException ignored) {}
+	}
 }

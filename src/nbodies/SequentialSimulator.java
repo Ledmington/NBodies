@@ -4,12 +4,6 @@ import nbodies.view.SimulationView;
 
 public class SequentialSimulator extends AbstractSimulator {
 
-	/* virtual time */
-	private double vt;
-
-	/* virtual time step */
-	double dt;
-
 	public SequentialSimulator(SimulationView viewer) {
 		super(viewer);
 
@@ -23,8 +17,9 @@ public class SequentialSimulator extends AbstractSimulator {
 	
 	public void execute(long nSteps) {
 		/* init virtual time */
-		vt = 0;
-		dt = 0.001;
+		/* virtual time */
+		double vt = 0;
+		double dt = 0.001;
 
 		long iter = 0;
 
@@ -59,7 +54,7 @@ public class SequentialSimulator extends AbstractSimulator {
 			iter++;
 
 			/* display current stage */
-			//viewer.display(bodies, vt, iter, bounds);
+			viewer.display(bodies, vt, iter, bounds);
 		}
 	}
 
