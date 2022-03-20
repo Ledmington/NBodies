@@ -25,6 +25,8 @@ public class NBodies {
 
 		SimulationData data = SimulationDataFactory.testBodySet4_many_bodies();
 
+		System.out.println(data);
+
     	SimulationView viewer = new SimulationView(size, size, data);
 
     	//Simulator sim = new SequentialSimulator(data);

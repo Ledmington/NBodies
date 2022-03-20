@@ -46,4 +46,13 @@ public class SimulationData {
 	public long getIteration() {
 		return iter;
 	}
+
+	public String toString() {
+		return "Simulating " + bodies.size() + " bodies\n" +
+				"Boundaries:\n" +
+				"\tx: [" + bounds.getXMin() + ", " + bounds.getXMax() + "]\n" +
+				"\ty: [" + bounds.getYMin() + ", " + bounds.getYMax() + "]\n" +
+				"delta time: " + dt +
+				"\n\n";
+	}
 }
