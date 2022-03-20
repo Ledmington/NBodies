@@ -64,20 +64,16 @@ public class Body {
     
     /**
      * Change the velocity
-     * 
-     * @param vx
-     * @param vy
-     */
+     *
+	 */
     public void changeVel(double vx, double vy){
     	vel.change(vx, vy);
     }
   	
     /**
      * Computes the distance from the specified body
-     * 
-     * @param b
-     * @return
-     */
+     *
+	 */
     public double getDistanceFrom(Body b) {
     	double dx = pos.getX() - b.getPos().getX();
     	double dy = pos.getY() - b.getPos().getY();
@@ -87,11 +83,8 @@ public class Body {
     /**
      * 
      * Compute the repulsive force exerted by another body
-     * 
-     * @param b
-     * @return
-     * @throws InfiniteForceException
-     */
+     *
+	 */
     public V2d computeRepulsiveForceBy(Body b) throws InfiniteForceException {
 		double dist = getDistanceFrom(b);
 		if (dist > 0) {
@@ -118,23 +111,25 @@ public class Body {
     /**
      * Check if there are collisions with the boundary and update the
      * position and velocity accordingly
-     * 
-     * @param bounds
-     */
-    public void checkAndSolveBoundaryCollision(Boundary bounds){
+     *
+	 */
+    public void checkAndSolveBoundaryCollision(Boundary bounds) {
     	double x = pos.getX();
     	double y = pos.getY();
-        if (x > bounds.getXMax()){
-            pos.change(bounds.getXMax(), pos.getY());
+
+        if (x > bounds.getXMax()) {
+            pos.change(bounds.getXMax(), y);
             vel.change(-vel.getX(), vel.getY());
-        } else if (x < bounds.getXMin()){
-            pos.change(bounds.getXMin(), pos.getY());
+        } else if (x < bounds.getXMin()) {
+            pos.change(bounds.getXMin(), y);
             vel.change(-vel.getX(), vel.getY());
-        } else if (y > bounds.getYMax()){
-            pos.change(pos.getX(), bounds.getYMax());
+        }
+
+		if (y > bounds.getYMax()) {
+            pos.change(x, bounds.getYMax());
             vel.change(vel.getX(), -vel.getY());
-        } else if (y < bounds.getYMin()){
-            pos.change(pos.getX(), bounds.getYMin());
+        } else if (y < bounds.getYMin()) {
+            pos.change(x, bounds.getYMin());
             vel.change(vel.getX(), -vel.getY());
         }
     }
