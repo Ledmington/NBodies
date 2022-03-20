@@ -23,7 +23,7 @@ public class NBodies {
 		int height = (int) screenSize.getHeight();
 		int size = min(width, height) - 100;
 
-		SimulationData data = SimulationDataFactory.testBodySet3_some_bodies();
+		SimulationData data = SimulationDataFactory.testBodySet4_many_bodies();
 
 		// TODO pass simulation data to viewer to avoid the "model-call-graphic" thing
 

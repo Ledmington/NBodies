@@ -11,15 +11,7 @@ public class SequentialSimulator extends AbstractSimulator {
 	}
 	
 	public void execute(long nSteps) {
-		/* init virtual time */
-		/* virtual time */
-		double vt = 0;
-		double dt = 0.001;
-
-		long iter = 0;
-
-		/* simulation loop */
-		while (iter < nSteps) {
+		while (data.getIteration() < nSteps) {
 			//System.out.println(iter + " out of " + nSteps); // TODO remove if not needed
 
 			/* update bodies velocity */
@@ -31,12 +23,12 @@ public class SequentialSimulator extends AbstractSimulator {
 				V2d acc = new V2d(totalForce).scalarMul(1.0 / b.getMass());
 
 				/* update velocity */
-				b.updateVelocity(acc, dt);
+				b.updateVelocity(acc, data.getDelta());
 			}
 
 			/* compute bodies new pos */
 			for (Body b : getBodies()) {
-				b.updatePos(dt);
+				b.updatePos(data.getDelta());
 			}
 
 			/* check collisions with boundaries */
@@ -44,12 +36,10 @@ public class SequentialSimulator extends AbstractSimulator {
 				b.checkAndSolveBoundaryCollision(getBounds());
 			}
 
-			/* update virtual time */
-			vt = vt + dt;
-			iter++;
+			data.nextIteration();
 
 			/* display current stage */
-			viewer.display(getBodies(), vt, iter, getBounds());
+			viewer.display(getBodies(), data.getTime(), data.getIteration(), getBounds());
 		}
 	}
 }

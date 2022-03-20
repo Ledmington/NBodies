@@ -20,12 +20,7 @@ public class MultiThreadSimulator extends AbstractSimulator {
 	}
 
 	public void execute(long nSteps) {
-		double vt = 0;
-		double dt = 0.001;
-
-		long iter = 0;
-
-		while (iter < nSteps) {
+		while (data.getIteration() < nSteps) {
 			//System.out.println(iter + " out of " + nSteps); // TODO remove if not needed
 
 			for (Body b : getBodies()) {
@@ -33,21 +28,18 @@ public class MultiThreadSimulator extends AbstractSimulator {
 
 				V2d acc = new V2d(totalForce).scalarMul(1.0 / b.getMass());
 
-				b.updateVelocity(acc, dt);
+				b.updateVelocity(acc, data.getDelta());
 			}
 
 			for (Body b : getBodies()) {
-				b.updatePos(dt);
+				b.updatePos(data.getDelta());
 			}
 
 			for (Body b : getBodies()) {
 				b.checkAndSolveBoundaryCollision(getBounds());
 			}
 
-			vt = vt + dt;
-			iter++;
-
-			//viewer.display(bodies, vt, iter, bounds);
+			data.nextIteration();
 		}
 	}
 
