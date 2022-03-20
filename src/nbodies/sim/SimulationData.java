@@ -53,6 +53,6 @@ public class SimulationData {
 				"\tx: [" + bounds.getXMin() + ", " + bounds.getXMax() + "]\n" +
 				"\ty: [" + bounds.getYMin() + ", " + bounds.getYMax() + "]\n" +
 				"delta time: " + dt +
-				"\n\n";
+				"\n";
 	}
 }
