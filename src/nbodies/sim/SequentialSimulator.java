@@ -1,5 +1,7 @@
-package nbodies;
+package nbodies.sim;
 
+import nbodies.Body;
+import nbodies.V2d;
 import nbodies.view.SimulationView;
 
 public class SequentialSimulator extends AbstractSimulator {

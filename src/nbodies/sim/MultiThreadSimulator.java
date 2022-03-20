@@ -1,5 +1,7 @@
-package nbodies;
+package nbodies.sim;
 
+import nbodies.Body;
+import nbodies.V2d;
 import nbodies.view.SimulationView;
 
 import java.util.List;
@@ -13,7 +15,7 @@ public class MultiThreadSimulator extends AbstractSimulator {
 		super(viewer);
 		workers = Stream.generate(() -> 1)
 				.limit(nThreads)
-				.map(i -> new Worker())
+				.map(i -> new Worker(() -> null)) // TODO fix
 				.toList();
 	}
 

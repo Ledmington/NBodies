@@ -1,4 +1,4 @@
-package nbodies;
+package nbodies.sim;
 
 import java.util.function.Supplier;
 

@@ -1,5 +1,9 @@
-package nbodies;
+package nbodies.sim;
 
+import nbodies.Body;
+import nbodies.Boundary;
+import nbodies.P2d;
+import nbodies.V2d;
 import nbodies.view.SimulationView;
 
 import java.util.ArrayList;

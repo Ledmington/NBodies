@@ -1,9 +1,10 @@
 package nbodies;
 
+import nbodies.sim.ExecutorSimulator;
+import nbodies.sim.Simulator;
 import nbodies.view.SimulationView;
 
 import java.awt.*;
-import java.util.stream.Stream;
 
 import static java.lang.Integer.min;
 
