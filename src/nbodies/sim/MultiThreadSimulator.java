@@ -11,8 +11,8 @@ public class MultiThreadSimulator extends AbstractSimulator {
 
 	private final List<Worker> workers;
 
-	protected MultiThreadSimulator(SimulationView viewer, int nThreads) {
-		super(viewer);
+	protected MultiThreadSimulator(final SimulationView viewer, final SimulationData data, final int nThreads) {
+		super(viewer, data);
 		workers = Stream.generate(() -> 1)
 				.limit(nThreads)
 				.map(i -> new Worker(() -> null)) // TODO fix
@@ -26,9 +26,9 @@ public class MultiThreadSimulator extends AbstractSimulator {
 		long iter = 0;
 
 		while (iter < nSteps) {
-			System.out.println(iter + " out of " + nSteps);
+			//System.out.println(iter + " out of " + nSteps); // TODO remove if not needed
 
-			for (Body b : bodies) {
+			for (Body b : getBodies()) {
 				V2d totalForce = computeTotalForceOnBody(b);
 
 				V2d acc = new V2d(totalForce).scalarMul(1.0 / b.getMass());
@@ -36,12 +36,12 @@ public class MultiThreadSimulator extends AbstractSimulator {
 				b.updateVelocity(acc, dt);
 			}
 
-			for (Body b : bodies) {
+			for (Body b : getBodies()) {
 				b.updatePos(dt);
 			}
 
-			for (Body b : bodies) {
-				b.checkAndSolveBoundaryCollision(bounds);
+			for (Body b : getBodies()) {
+				b.checkAndSolveBoundaryCollision(getBounds());
 			}
 
 			vt = vt + dt;

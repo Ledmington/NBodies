@@ -6,15 +6,8 @@ import nbodies.view.SimulationView;
 
 public class SequentialSimulator extends AbstractSimulator {
 
-	public SequentialSimulator(SimulationView viewer) {
-		super(viewer);
-
-		/* initializing boundary and bodies */
-
-		//testBodySet1_two_bodies();
-		//testBodySet2_three_bodies();
-		//testBodySet3_some_bodies();
-		testBodySet4_many_bodies();
+	public SequentialSimulator(final SimulationView viewer, final SimulationData data) {
+		super(viewer, data);
 	}
 	
 	public void execute(long nSteps) {
@@ -27,10 +20,10 @@ public class SequentialSimulator extends AbstractSimulator {
 
 		/* simulation loop */
 		while (iter < nSteps) {
-			System.out.println(iter + " out of " + nSteps);
+			//System.out.println(iter + " out of " + nSteps); // TODO remove if not needed
 
 			/* update bodies velocity */
-			for (Body b : bodies) {
+			for (Body b : getBodies()) {
 				/* compute total force on bodies */
 				V2d totalForce = computeTotalForceOnBody(b);
 
@@ -42,13 +35,13 @@ public class SequentialSimulator extends AbstractSimulator {
 			}
 
 			/* compute bodies new pos */
-			for (Body b : bodies) {
+			for (Body b : getBodies()) {
 				b.updatePos(dt);
 			}
 
 			/* check collisions with boundaries */
-			for (Body b : bodies) {
-				b.checkAndSolveBoundaryCollision(bounds);
+			for (Body b : getBodies()) {
+				b.checkAndSolveBoundaryCollision(getBounds());
 			}
 
 			/* update virtual time */
@@ -56,11 +49,7 @@ public class SequentialSimulator extends AbstractSimulator {
 			iter++;
 
 			/* display current stage */
-			viewer.display(bodies, vt, iter, bounds);
+			viewer.display(getBodies(), vt, iter, getBounds());
 		}
-	}
-
-	public void stop() {
-		bodies.clear();
 	}
 }
