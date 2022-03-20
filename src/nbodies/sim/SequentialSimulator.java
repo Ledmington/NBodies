@@ -2,12 +2,11 @@ package nbodies.sim;
 
 import nbodies.Body;
 import nbodies.V2d;
-import nbodies.view.SimulationView;
 
 public class SequentialSimulator extends AbstractSimulator {
 
-	public SequentialSimulator(final SimulationView viewer, final SimulationData data) {
-		super(viewer, data);
+	public SequentialSimulator(final SimulationData data) {
+		super(data);
 	}
 	
 	public void execute(long nSteps) {
@@ -37,9 +36,6 @@ public class SequentialSimulator extends AbstractSimulator {
 			}
 
 			data.nextIteration();
-
-			/* display current stage */
-			viewer.display(getBodies(), data.getTime(), data.getIteration(), getBounds());
 		}
 	}
 }

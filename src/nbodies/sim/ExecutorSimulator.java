@@ -2,7 +2,6 @@ package nbodies.sim;
 
 import nbodies.Body;
 import nbodies.V2d;
-import nbodies.view.SimulationView;
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -11,8 +10,8 @@ public class ExecutorSimulator extends AbstractSimulator {
 
 	private final ExecutorService executor;
 
-	public ExecutorSimulator(final SimulationView viewer, final SimulationData data) {
-		super(viewer, data);
+	public ExecutorSimulator(final SimulationData data) {
+		super(data);
 		executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 	}
 
@@ -50,9 +49,6 @@ public class ExecutorSimulator extends AbstractSimulator {
 			}
 
 			data.nextIteration();
-
-			/* display current stage */
-			viewer.display(getBodies(), data.getTime(), data.getIteration(), getBounds());
 		}
 	}
 

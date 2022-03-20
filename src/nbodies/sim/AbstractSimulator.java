@@ -3,17 +3,14 @@ package nbodies.sim;
 import nbodies.Body;
 import nbodies.Boundary;
 import nbodies.V2d;
-import nbodies.view.SimulationView;
 
 import java.util.ArrayList;
 
 public abstract class AbstractSimulator implements Simulator {
 
-	protected final SimulationView viewer;
 	protected final SimulationData data;
 
-	protected AbstractSimulator(final SimulationView viewer, final SimulationData data) {
-		this.viewer = viewer;
+	protected AbstractSimulator(final SimulationData data) {
 		this.data = data;
 	}
 

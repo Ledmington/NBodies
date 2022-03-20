@@ -25,13 +25,11 @@ public class NBodies {
 
 		SimulationData data = SimulationDataFactory.testBodySet4_many_bodies();
 
-		// TODO pass simulation data to viewer to avoid the "model-call-graphic" thing
+    	SimulationView viewer = new SimulationView(size, size, data);
 
-    	SimulationView viewer = new SimulationView(size, size);
-
-    	//Simulator sim = new SequentialSimulator(viewer, data);
-		Simulator sim = new ExecutorSimulator(viewer, data);
-		//Simulator sim = new MultiThreadSimulator(viewer, data);
+    	//Simulator sim = new SequentialSimulator(data);
+		Simulator sim = new ExecutorSimulator(data);
+		//Simulator sim = new MultiThreadSimulator(data);
         sim.execute(50000);
     }
 }

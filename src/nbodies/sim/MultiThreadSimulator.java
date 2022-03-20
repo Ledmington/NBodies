@@ -2,7 +2,6 @@ package nbodies.sim;
 
 import nbodies.Body;
 import nbodies.V2d;
-import nbodies.view.SimulationView;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -11,8 +10,8 @@ public class MultiThreadSimulator extends AbstractSimulator {
 
 	private final List<Worker> workers;
 
-	protected MultiThreadSimulator(final SimulationView viewer, final SimulationData data, final int nThreads) {
-		super(viewer, data);
+	protected MultiThreadSimulator(final SimulationData data, final int nThreads) {
+		super(data);
 		workers = Stream.generate(() -> 1)
 				.limit(nThreads)
 				.map(i -> new Worker(() -> null)) // TODO fix
