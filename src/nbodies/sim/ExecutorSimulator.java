@@ -16,37 +16,43 @@ public class ExecutorSimulator extends AbstractSimulator {
 	}
 
 	public void execute(long nSteps) {
+		final Map<Body, Future<V2d>> waitingTasks = new HashMap<>();
+		final Map<Body, V2d> totalForces = new HashMap<>();
+
 		while (data.getIteration() < nSteps) {
 			//System.out.println(iter + " out of " + nSteps); // TODO remove if not needed
 
-			Map<Body, Future<V2d>> totalForces = new HashMap<>();
 			for (Body b : getBodies()) {
-				Future<V2d> tempResult = executor.submit(() -> computeTotalForceOnBody(b));
-				totalForces.put(b, tempResult);
+				Future<V2d> task = executor.submit(() -> computeTotalForceOnBody(b));
+				waitingTasks.put(b, task);
 			}
 
-			for (Body b : totalForces.keySet()) {
+			// explicit global synchronization (and gathering results)
+			waitingTasks.forEach((key, value) -> {
 				try {
-					V2d totalForce = totalForces.get(b).get();
-					V2d acc = new V2d(totalForce).scalarMul(1.0 / b.getMass());
-					b.updateVelocity(acc, data.getDelta());
-				} catch (InterruptedException | ExecutionException ignored) {}
-			}
+					totalForces.put(key, value.get());
+				} catch (InterruptedException | ExecutionException ignored) {
+				}
+			});
 
-			List<Future<Void>> tempResult = new LinkedList<>();
-			for (Body b : getBodies()) {
-				tempResult.add(executor.submit(() -> {
+			totalForces.forEach((b, v) -> {
+				Future<V2d> task = executor.submit(() -> {
+					V2d acc = new V2d(v).scalarMul(1.0 / b.getMass());
+					b.updateVelocity(acc, data.getDelta());
 					b.updatePos(data.getDelta());
 					b.checkAndSolveBoundaryCollision(getBounds());
 					return null;
-				}));
-			}
+				});
+				waitingTasks.put(b, task);
+			});
 
-			for (Future<Void> f : tempResult) {
+			// explicit global synchronization at the end of every iteration
+			waitingTasks.forEach((key, value) -> {
 				try {
-					f.get();
-				} catch (InterruptedException | ExecutionException ignored) {}
-			}
+					value.get();
+				} catch (InterruptedException | ExecutionException ignored) {
+				}
+			});
 
 			data.nextIteration();
 		}
