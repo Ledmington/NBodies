@@ -58,10 +58,10 @@ public class VisualiserFrame extends JFrame {
 		this.pack();
 	}
 
-	public void display(ArrayList<Body> bodies, double vt, long iter, Boundary bounds){
+	public void display(ArrayList<Body> bodies, double vt, long iter, Boundary bounds, String eta){
 		try {
 			SwingUtilities.invokeAndWait(() -> {
-				panel.display(bodies, vt, iter, bounds);
+				panel.display(bodies, vt, iter, bounds, eta);
 				repaint();
 			});
 		} catch (Exception ignored) {}

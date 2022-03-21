@@ -33,5 +33,4 @@ public class Boundary {
 	public double getYMax(){
 		return yMax;
 	}
-
 }

@@ -24,7 +24,7 @@ public class SimulationView {
 
 		Thread t = new Thread(() -> {
 			while(true) {
-				display(data.getBodies(), data.getTime(), data.getIteration(), data.getBounds());
+				display(data.getBodies(), data.getTime(), data.getIteration(), data.getBounds(), data.getETA());
 				try {
 					// TODO remove comment
 					Thread.sleep(50); // apparently 100 is too much and 50ms is just enough to make things look smooth
@@ -34,7 +34,7 @@ public class SimulationView {
 		t.start();
     }
         
-    public void display(ArrayList<Body> bodies, double vt, long iter, Boundary bounds){
- 	   frame.display(bodies, vt, iter, bounds); 
+    public void display(ArrayList<Body> bodies, double vt, long iter, Boundary bounds, String eta){
+ 	   frame.display(bodies, vt, iter, bounds, eta);
     }
 }

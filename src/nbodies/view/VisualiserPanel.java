@@ -16,6 +16,7 @@ public class VisualiserPanel extends JPanel {
 
 	private long nIter;
 	private double vt;
+	private String eta;
 
 	private final int dx;
 	private final int dy;
@@ -68,7 +69,8 @@ public class VisualiserPanel extends JPanel {
 			});
 			String time = String.format("%.2f", vt);
 			g2.drawString("Bodies: " + bodies.size() + " - vt: " + time + " - nIter: " + nIter, 2, 10);
-			g2.drawString("(+/- to zoom, arrows to move around)", 2, 25);
+			g2.drawString("Remaining time: "+this.eta, 2, 25);
+			g2.drawString("(+/- to zoom, arrows to move around)", 2, 40);
 		}
 	}
 
@@ -80,10 +82,11 @@ public class VisualiserPanel extends JPanel {
 		return (int)(getYCenter() - y*dy*getScale());
 	}
 
-	public void display(ArrayList<Body> bodies, double vt, long iter, Boundary bounds) {
+	public void display(ArrayList<Body> bodies, double vt, long iter, Boundary bounds, String eta) {
 		this.bodies = bodies;
 		this.bounds = bounds;
 		this.vt = vt;
 		this.nIter = iter;
+		this.eta = eta;
 	}
 }
