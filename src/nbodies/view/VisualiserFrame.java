@@ -17,7 +17,7 @@ public class VisualiserFrame extends JFrame {
 		setResizable(false);
 		setFocusable(true);
 
-		MovingArrowsListener listener = new MovingArrowsListener();
+		MovingArrowsListener listener = new MovingArrowsListener(w, h);
 		addKeyListener(listener);
 
 		setLayout(new BorderLayout());

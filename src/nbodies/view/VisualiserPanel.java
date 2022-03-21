@@ -17,11 +17,11 @@ public class VisualiserPanel extends JPanel {
 	private long nIter;
 	private double vt;
 
-	private final long dx;
-	private final long dy;
+	private final int dx;
+	private final int dy;
 
 	public VisualiserPanel(int w, int h, MovingArrowsListener listener){
-		setSize(w,h);
+		setSize(w, h);
 		dx = w/2 - 20;
 		dy = h/2 - 20;
 		this.listener = listener;
@@ -34,22 +34,27 @@ public class VisualiserPanel extends JPanel {
 		return listener.getScale();
 	}
 
+	private int getXCenter() {
+		return listener.getXCenter();
+	}
+
+	private int getYCenter() {
+		return listener.getYCenter();
+	}
+
 	public void paint(Graphics g){
 		if (bodies != null) {
 			Graphics2D g2 = (Graphics2D) g;
 
-			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-					RenderingHints.VALUE_ANTIALIAS_ON);
-			g2.setRenderingHint(RenderingHints.KEY_RENDERING,
-					RenderingHints.VALUE_RENDER_QUALITY);
+			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			g2.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 			g2.clearRect(0, 0, this.getWidth(), this.getHeight());
 
+			int x0 = getXCoord(bounds.getXMin());
+			int y0 = getYCoord(bounds.getYMin());
 
-			int x0 = getXcoord(bounds.getXMin());
-			int y0 = getYcoord(bounds.getYMin());
-
-			int wd = getXcoord(bounds.getXMax()) - x0;
-			int ht = y0 - getYcoord(bounds.getYMax());
+			int wd = getXCoord(bounds.getXMax()) - x0;
+			int ht = y0 - getYCoord(bounds.getYMax());
 
 			g2.drawRect(x0, y0 - ht, wd, ht);
 
@@ -59,22 +64,23 @@ public class VisualiserPanel extends JPanel {
 				if (radius < 1) {
 					radius = 1;
 				}
-				g2.drawOval(getXcoord(p.getX()), getYcoord(p.getY()), radius, radius);
+				g2.drawOval(getXCoord(p.getX()), getYCoord(p.getY()), radius, radius);
 			});
 			String time = String.format("%.2f", vt);
-			g2.drawString("Bodies: " + bodies.size() + " - vt: " + time + " - nIter: " + nIter + " (UP for zoom in, DOWN for zoom out)", 2, 20);
+			g2.drawString("Bodies: " + bodies.size() + " - vt: " + time + " - nIter: " + nIter, 2, 10);
+			g2.drawString("(+/- to zoom, arrows to move around)", 2, 25);
 		}
 	}
 
-	private int getXcoord(double x) {
-		return (int)(dx + x*dx*getScale());
+	private int getXCoord(double x) {
+		return (int)(getXCenter() + x*dx*getScale());
 	}
 
-	private int getYcoord(double y) {
-		return (int)(dy - y*dy*getScale());
+	private int getYCoord(double y) {
+		return (int)(getYCenter() - y*dy*getScale());
 	}
 
-	public void display(ArrayList<Body> bodies, double vt, long iter, Boundary bounds){
+	public void display(ArrayList<Body> bodies, double vt, long iter, Boundary bounds) {
 		this.bodies = bodies;
 		this.bounds = bounds;
 		this.vt = vt;
