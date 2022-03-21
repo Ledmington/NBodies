@@ -67,10 +67,14 @@ public class VisualiserPanel extends JPanel {
 				}
 				g2.drawOval(getXCoord(p.getX()), getYCoord(p.getY()), radius, radius);
 			});
+
+			double totalMod = bodies.stream().mapToDouble(b -> b.getVel().mod()).sum();
+
 			String time = String.format("%.2f", vt);
 			g2.drawString("Bodies: " + bodies.size() + " - vt: " + time + " - nIter: " + nIter, 2, 10);
-			g2.drawString("Remaining time: "+this.eta, 2, 25);
-			g2.drawString("(+/- to zoom, arrows to move around)", 2, 40);
+			g2.drawString(String.format("Total velocity: %.3e", totalMod), 2, 25);
+			g2.drawString("Remaining time: "+this.eta, 2, 40);
+			g2.drawString("(+/- to zoom, arrows to move around)", 2, 55);
 		}
 	}
 

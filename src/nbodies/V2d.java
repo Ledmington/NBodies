@@ -45,9 +45,13 @@ public class V2d  {
     	y += v.y;
     	return this;
     }
+
+	public double mod() {
+		return Math.sqrt(x*x + y*y);
+	}
     
     public V2d normalize() throws NullVectorException {
-    	double mod =  Math.sqrt(x*x + y*y);
+    	double mod = mod();
     	if (mod > 0) {
     		x /= mod;
     		y /= mod;
@@ -55,8 +59,8 @@ public class V2d  {
     	} else {
     		throw new NullVectorException();
     	}
-
     }
+
     public V2d change(double x, double y) {
     	this.x = x;
     	this.y = y;
