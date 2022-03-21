@@ -1,7 +1,6 @@
-package nbodies;
+package nbodies.sim;
 
 public interface Simulator {
 	void execute(final long nsteps);
-	void stop();
-	boolean isRunning();
+	//void stop(); // TODO fix
 }

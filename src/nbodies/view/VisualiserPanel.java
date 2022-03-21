@@ -55,7 +55,7 @@ public class VisualiserPanel extends JPanel {
 
 			bodies.forEach( b -> {
 				P2d p = b.getPos();
-				int radius = (int) (10*getScale());
+				int radius = (int) (10 * getScale());
 				if (radius < 1) {
 					radius = 1;
 				}
