@@ -75,6 +75,7 @@ public class SimulationData {
 
 	public String toString() {
 		return "Simulating " + bodies.size() + " bodies\n" +
+				"Steps: " + steps + "\n" +
 				"Boundaries:\n" +
 				"\tx: [" + bounds.getXMin() + ", " + bounds.getXMax() + "]\n" +
 				"\ty: [" + bounds.getYMin() + ", " + bounds.getYMax() + "]\n" +
