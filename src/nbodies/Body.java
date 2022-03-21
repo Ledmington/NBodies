@@ -9,7 +9,6 @@ public class Body {
     
 	private static final double REPULSIVE_CONST = 0.01;
 	private static final double FRICTION_CONST = 10;
-	private static final double RADIUS = 0.01;
 	
     private final P2d pos;
     private final V2d vel;
@@ -118,19 +117,19 @@ public class Body {
     	double x = pos.getX();
     	double y = pos.getY();
 
-        if (x > bounds.getXMax() - RADIUS) {
-            pos.change(bounds.getXMax()-RADIUS, y);
+        if (x > bounds.getXMax()) {
+            pos.change(bounds.getXMax(), y);
             vel.change(-vel.getX(), vel.getY());
-        } else if (x < bounds.getXMin() + RADIUS) {
-            pos.change(bounds.getXMin()+RADIUS, y);
+        } else if (x < bounds.getXMin()) {
+            pos.change(bounds.getXMin(), y);
             vel.change(-vel.getX(), vel.getY());
         }
 
-		if (y > bounds.getYMax() - RADIUS) {
-            pos.change(x, bounds.getYMax()-RADIUS);
+		if (y > bounds.getYMax()) {
+            pos.change(x, bounds.getYMax());
             vel.change(vel.getX(), -vel.getY());
-        } else if (y < bounds.getYMin() + RADIUS) {
-            pos.change(x, bounds.getYMin()+RADIUS);
+        } else if (y < bounds.getYMin()) {
+            pos.change(x, bounds.getYMin());
             vel.change(vel.getX(), -vel.getY());
         }
     }

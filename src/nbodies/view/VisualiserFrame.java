@@ -34,7 +34,7 @@ public class VisualiserFrame extends JFrame {
 		JLabel statusLabel = new JLabel("Status: ");
 		topBar.add(statusLabel);
 
-		Thread statusUpdaterThread = new Thread(() -> {
+		/*Thread statusUpdaterThread = new Thread(() -> {
 			while(true) {
 				// TODO avoid this null check
 				if(NBodies.getSimulator() != null) {
@@ -49,7 +49,7 @@ public class VisualiserFrame extends JFrame {
 				} catch (InterruptedException ignored) {}
 			}
 		});
-		statusUpdaterThread.start();
+		statusUpdaterThread.start();*/
 
 		getContentPane().add(topBar, BorderLayout.NORTH);
 
