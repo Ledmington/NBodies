@@ -11,14 +11,16 @@ public class ReusableBarrier implements Barrier {
 	}
 	
 	@Override
-	public synchronized void hitAndWaitAll() throws InterruptedException {
+	public synchronized void hitAndWaitAll() {
 		n--;
 		if(n == 0) {
 			notifyAll();
-			n = max;
+			n = max; // TODO: maybe here we need to use two barriers to make sure that all threads are out before going back in
 		}
 		else {
-			wait();
+			try {
+				wait();
+			} catch (InterruptedException ignored) {}
 		}
 	}
 }

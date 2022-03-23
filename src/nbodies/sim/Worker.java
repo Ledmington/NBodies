@@ -1,23 +1,16 @@
 package nbodies.sim;
 
-import java.util.function.Supplier;
-
 public class Worker extends Thread {
 
-	private boolean stop = false;
-	private final Supplier<Runnable> taskSupplier;
+	private final int id;
+	private final Runnable task;
 
-	public Worker(Supplier<Runnable> taskSupplier) {
-		this.taskSupplier = taskSupplier;
+	public Worker(final int id, final Runnable task) {
+		this.id = id;
+		this.task = task;
 	}
 
 	public void run() {
-		while(!stop) {
-			taskSupplier.get().run();
-		}
-	}
-
-	public void die() {
-		stop = true;
+		task.run();
 	}
 }

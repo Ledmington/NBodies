@@ -30,8 +30,8 @@ public class NBodies {
     	SimulationView viewer = new SimulationView(size, size, data);
 
     	//Simulator sim = new SequentialSimulator(data);
-		Simulator sim = new ExecutorSimulator(data);
-		//Simulator sim = new MultiThreadSimulator(data);
+		//Simulator sim = new ExecutorSimulator(data);
+		Simulator sim = new MultiThreadSimulator(data);
         sim.execute(50000);
     }
 }
