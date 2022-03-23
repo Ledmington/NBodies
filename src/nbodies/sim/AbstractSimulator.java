@@ -3,6 +3,7 @@ package nbodies.sim;
 import nbodies.Body;
 import nbodies.Boundary;
 import nbodies.V2d;
+import nbodies.sim.data.SimulationData;
 
 import java.util.ArrayList;
 

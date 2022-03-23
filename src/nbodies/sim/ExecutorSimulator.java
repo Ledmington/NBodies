@@ -2,6 +2,7 @@ package nbodies.sim;
 
 import nbodies.Body;
 import nbodies.V2d;
+import nbodies.sim.data.SimulationData;
 
 import java.util.*;
 import java.util.concurrent.*;

@@ -1,4 +1,4 @@
-package nbodies.sim;
+package nbodies.sim.data;
 
 import nbodies.Body;
 import nbodies.Boundary;

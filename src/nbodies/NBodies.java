@@ -1,6 +1,8 @@
 package nbodies;
 
 import nbodies.sim.*;
+import nbodies.sim.data.SimulationData;
+import nbodies.sim.data.SimulationDataFactory;
 import nbodies.view.SimulationView;
 
 import java.awt.*;

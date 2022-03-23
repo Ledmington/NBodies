@@ -2,7 +2,7 @@ package nbodies.view;
 
 import nbodies.Body;
 import nbodies.Boundary;
-import nbodies.sim.SimulationData;
+import nbodies.sim.data.SimulationData;
 
 import java.util.ArrayList;
 
