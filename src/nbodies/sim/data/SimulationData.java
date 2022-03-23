@@ -29,6 +29,10 @@ public class SimulationData {
 		this(bodies, bounds, 0.001, 50000, Runtime.getRuntime().availableProcessors());
 	}
 
+	public static SimulationDataBuilder builder() {
+		return new SimulationDataBuilder();
+	}
+
 	public void nextIteration() {
 		vt += dt;
 		iter++;

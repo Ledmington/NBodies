@@ -2,7 +2,6 @@ package nbodies;
 
 import nbodies.sim.*;
 import nbodies.sim.data.SimulationData;
-import nbodies.sim.data.SimulationDataBuilder;
 import nbodies.sim.data.SimulationDataFactory;
 import nbodies.view.SimulationView;
 
@@ -28,7 +27,7 @@ public class NBodies {
 		int size = min(width, height) - 100;
 
 		//SimulationData data = SimulationDataFactory.testBodySet4_many_bodies();
-		SimulationData data = new SimulationDataBuilder()
+		SimulationData data = SimulationData.builder()
 				.numBodies(1000)
 				.bodies(randomBodyIn(-1, 1, -1, 1))
 				.bounds(new Boundary(-6, -6, 6, 6))
