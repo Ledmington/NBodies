@@ -59,10 +59,19 @@ public class ExecutorSimulator extends AbstractSimulator {
 		}
 	}
 
+	public void start() {
+		// TODO
+	}
+
 	public void stop() {
+		// TODO fix
 		executor.shutdown();
 		try {
 			boolean b = executor.awaitTermination(1000_000_000, TimeUnit.SECONDS);
 		} catch (InterruptedException ignored) {}
+	}
+
+	public boolean isRunning() {
+		return false; // TODO
 	}
 }

@@ -2,6 +2,8 @@ package nbodies.sim.data;
 
 import nbodies.Body;
 import nbodies.Boundary;
+import nbodies.utils.barrier.Barrier;
+import nbodies.utils.barrier.ReusableBarrier;
 
 import java.time.*;
 import java.util.ArrayList;
@@ -14,6 +16,9 @@ public class SimulationData {
 	private final double dt;
 	private long iter = 0;
 	private final long steps;
+
+	private final Barrier pause;
+
 	private Instant beginning;
 	private Instant lastIteration = null;
 
@@ -23,6 +28,7 @@ public class SimulationData {
 		this.bounds = bounds;
 		this.dt = dt;
 		this.steps = nsteps;
+		pause = new ReusableBarrier(nThreads+1);
 	}
 
 	public SimulationData(final ArrayList<Body> bodies, final Boundary bounds) {
@@ -69,6 +75,10 @@ public class SimulationData {
 
 	public int getNThreads() {
 		return nThreads;
+	}
+
+	public Barrier getPause() {
+		return pause;
 	}
 
 	public boolean isFinished() {

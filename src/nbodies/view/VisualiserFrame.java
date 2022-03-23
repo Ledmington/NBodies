@@ -28,13 +28,15 @@ public class VisualiserFrame extends JFrame {
 		JPanel topBar = new JPanel();
 
 		JButton startButton = new JButton("Start");
+		startButton.addActionListener(e -> NBodies.getSimulator().start());
 		topBar.add(startButton);
 		JButton stopButton = new JButton("Stop");
+		stopButton.addActionListener(e -> NBodies.getSimulator().stop());
 		topBar.add(stopButton);
 		JLabel statusLabel = new JLabel("Status: ");
 		topBar.add(statusLabel);
 
-		/*Thread statusUpdaterThread = new Thread(() -> {
+		Thread statusUpdaterThread = new Thread(() -> {
 			while(true) {
 				// TODO avoid this null check
 				if(NBodies.getSimulator() != null) {
@@ -49,7 +51,7 @@ public class VisualiserFrame extends JFrame {
 				} catch (InterruptedException ignored) {}
 			}
 		});
-		statusUpdaterThread.start();*/
+		statusUpdaterThread.start();
 
 		getContentPane().add(topBar, BorderLayout.NORTH);
 

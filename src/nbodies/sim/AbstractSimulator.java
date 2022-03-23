@@ -10,6 +10,7 @@ import java.util.ArrayList;
 public abstract class AbstractSimulator implements Simulator {
 
 	protected final SimulationData data;
+	protected boolean running = false;
 
 	protected AbstractSimulator(final SimulationData data) {
 		this.data = data;

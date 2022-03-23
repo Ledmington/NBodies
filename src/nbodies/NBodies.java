@@ -2,7 +2,6 @@ package nbodies;
 
 import nbodies.sim.*;
 import nbodies.sim.data.SimulationData;
-import nbodies.sim.data.SimulationDataFactory;
 import nbodies.view.SimulationView;
 
 import java.awt.*;
@@ -17,8 +16,9 @@ import static nbodies.sim.data.SimulationDataBuilder.randomBodyIn;
  */
 public class NBodies {
 
-    public static void main(String[] args) {
+	private static Simulator sim;
 
+    public static void main(String[] args) {
 		System.out.println(Runtime.getRuntime().availableProcessors() + " cores available");
 
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -37,11 +37,15 @@ public class NBodies {
 
 		System.out.println(data);
 
-    	SimulationView viewer = new SimulationView(size, size, data);
+    	new SimulationView(size, size, data);
 
-    	//Simulator sim = new SequentialSimulator(data);
-		//Simulator sim = new ExecutorSimulator(data);
-		Simulator sim = new MultiThreadSimulator(data);
+    	//sim = new SequentialSimulator(data);
+		//sim = new ExecutorSimulator(data);
+		sim = new MultiThreadSimulator(data);
         sim.execute(50000);
     }
+
+	public static Simulator getSimulator() {
+		return sim;
+	}
 }

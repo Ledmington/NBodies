@@ -20,6 +20,7 @@ public class MultiThreadSimulator extends AbstractSimulator {
 	}
 
 	public void execute(long nSteps) {
+		running = true;
 		workers = new ArrayList<>();
 		for (int i=0; i<data.getNThreads(); i++) {
 			Worker w = new Worker(i, data, endCompute, endIteration, this::computeTotalForceOnBody);
@@ -33,7 +34,19 @@ public class MultiThreadSimulator extends AbstractSimulator {
 		});
 	}
 
+	public void start() {
+		if(running) return;
+		workers.forEach(Worker::wakeUp);
+		running = true;
+		data.getPause().hitAndWaitAll();
+	}
+
 	public void stop() {
-		workers.clear();
+		workers.forEach(Worker::pause);
+		running = false;
+	}
+
+	public boolean isRunning() {
+		return running;
 	}
 }

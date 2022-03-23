@@ -39,4 +39,16 @@ public class SequentialSimulator extends AbstractSimulator {
 			data.nextIteration();
 		}
 	}
+
+	public void start() {
+		// TODO
+	}
+
+	public void stop() {
+		// TODO
+	}
+
+	public boolean isRunning() {
+		return false; // TODO
+	}
 }

@@ -2,5 +2,7 @@ package nbodies.sim;
 
 public interface Simulator {
 	void execute(final long nsteps);
-	//void stop(); // TODO fix
+	void start();
+	void stop();
+	boolean isRunning();
 }

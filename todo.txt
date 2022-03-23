@@ -13,5 +13,3 @@ Measure computation time of each frame and show: min, max and avg
 Make the GUI resizable
 
 Measure performance
-
-Move worker code from MultiThreadSimulator into a new class

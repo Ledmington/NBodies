@@ -18,6 +18,7 @@ public class Worker extends Thread {
 	private final Barrier endCompute;
 	private final Barrier endIteration;
 	private final Function<Body, V2d> totalForceComputer;
+	private boolean paused = false;
 
 	public Worker(final int id, final SimulationData data, final Barrier endCompute, final Barrier endIteration, final Function<Body, V2d> totalForceComputer) {
 		this.id = id;
@@ -40,11 +41,9 @@ public class Worker extends Thread {
 				.collect(Collectors.toList());
 
 		while (!data.isFinished()) {
-			/*while(paused) {
-				try {
-					wait();
-				} catch (InterruptedException ignored) {}
-			}*/
+			while(paused) {
+				data.getPause().hitAndWaitAll();
+			}
 
 			for (Body b : myBodies) {
 				tmpForces.set(myBodies.indexOf(b), totalForceComputer.apply(b));
@@ -65,5 +64,13 @@ public class Worker extends Thread {
 			}
 			endIteration.hitAndWaitAll();
 		}
+	}
+
+	public void pause() {
+		paused = true;
+	}
+
+	public void wakeUp() {
+		paused = false;
 	}
 }
