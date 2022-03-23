@@ -61,6 +61,10 @@ public class SimulationData {
 		return iter;
 	}
 
+	public boolean isFinished() {
+		return iter >= steps;
+	}
+
 	public String getETA() {
 		if(beginning == null) return "";
 		Duration elapsed = Duration.between(beginning, Instant.now());

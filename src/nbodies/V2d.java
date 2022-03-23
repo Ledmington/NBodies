@@ -40,11 +40,10 @@ public class V2d  {
     	return this;
     }
     
-    public V2d sum(V2d v) {
+    public void sum(V2d v) {
     	x += v.x;
     	y += v.y;
-    	return this;
-    }
+	}
 
 	public double mod() {
 		return Math.sqrt(x*x + y*y);
@@ -61,11 +60,10 @@ public class V2d  {
     	}
     }
 
-    public V2d change(double x, double y) {
+    public void change(double x, double y) {
     	this.x = x;
     	this.y = y;
-    	return this;
-    }
+	}
     
     public double getX() {
     	return x;
@@ -74,6 +72,11 @@ public class V2d  {
     public double getY() {
     	return y;
     }
-    
-    
+
+	public String toString() {
+		return "V2d{" +
+				"x=" + x +
+				", y=" + y +
+				'}';
+	}
 }

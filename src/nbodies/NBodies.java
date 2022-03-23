@@ -33,7 +33,7 @@ public class NBodies {
 				.bodies(randomBodyIn(-1, 1, -1, 1))
 				.bounds(new Boundary(-6, -6, 6, 6))
 				.deltaTime(0.01)
-				.steps(1000)
+				.steps(10000)
 				.build();
 
 		System.out.println(data);

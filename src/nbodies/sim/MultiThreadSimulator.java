@@ -43,7 +43,7 @@ public class MultiThreadSimulator extends AbstractSimulator {
 						.limit(myBodies.size())
 						.collect(Collectors.toList());
 
-				while (data.getIteration() < nSteps) {
+				while (!data.isFinished()) {
 					//System.out.println(iter + " out of " + nSteps); // TODO remove if not needed
 
 					for (Body b : myBodies) {

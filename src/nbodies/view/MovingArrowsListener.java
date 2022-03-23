@@ -5,9 +5,9 @@ import java.awt.event.KeyListener;
 
 public class MovingArrowsListener implements KeyListener {
 
-	private final int MOVEMENT_SPEED = 3;
+	private static final int MOVEMENT_SPEED = 3;
 
-	private double scale = 1;
+	private double scale = 0.1;
 	private int x;
 	private int y;
 

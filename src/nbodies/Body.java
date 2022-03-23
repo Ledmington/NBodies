@@ -45,7 +45,7 @@ public class Body {
     	pos.sum(new V2d(vel).scalarMul(dt));
     }
 
-    /**
+	/**
      * Update the velocity, given the instant acceleration
      * @param acc instant acceleration
      * @param dt time elapsed
@@ -125,4 +125,12 @@ public class Body {
             vel.change(vel.getX(), -vel.getY());
         }
     }
+
+	public String toString() {
+		return "Body{" +
+				"pos=" + pos +
+				", vel=" + vel +
+				", mass=" + mass +
+				'}';
+	}
 }
