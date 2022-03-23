@@ -56,9 +56,7 @@ public class MultiThreadSimulator extends AbstractSimulator {
 						V2d acc = new V2d(tmpForceOnBody).scalarMul(1.0 / b.getMass());
 
 						b.updateVelocity(acc, data.getDelta());
-
 						b.updatePos(data.getDelta());
-
 						b.checkAndSolveBoundaryCollision(getBounds());
 					}
 
@@ -71,14 +69,14 @@ public class MultiThreadSimulator extends AbstractSimulator {
 			workers.add(w);
 			w.start();
 		}
-	}
-
-	public void stop() {
 		workers.forEach(t -> {
 			try {
 				t.join();
 			} catch (InterruptedException ignored) {}
 		});
+	}
+
+	public void stop() {
 		workers.clear();
 	}
 }

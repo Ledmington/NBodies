@@ -1,22 +1,19 @@
 package nbodies;
 
-
 /*
  * This class represents a body
  * 
  */
 public class Body {
-    
+
 	private static final double REPULSIVE_CONST = 0.01;
 	private static final double FRICTION_CONST = 10;
 	
     private final P2d pos;
     private final V2d vel;
     private final double mass;
-    private final int id;
     
-    public Body(int id, P2d pos, V2d vel, double mass){
-    	this.id = id;
+    public Body(P2d pos, V2d vel, double mass){
         this.pos = pos;
         this.vel = vel;
         this.mass = mass;
@@ -33,14 +30,9 @@ public class Body {
     public V2d getVel(){
         return vel;
     }
-    
-    public int getId() {
-    	return id;
-    }
-    
-    public boolean equals(Object b) {
-		if(b.getClass() != Body.class) return false;
-    	return ((Body)b).id == id;
+
+	public boolean equals(Object b) {
+		return this == b;
     }
     
     

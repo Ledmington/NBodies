@@ -27,10 +27,9 @@ public abstract class AbstractSimulator implements Simulator {
 
 		V2d totalForce = new V2d(0, 0);
 
-		/* compute total repulsive force */
-
+		// compute total repulsive force
 		for (Body otherBody : getBodies()) {
-			if (!b.equals(otherBody)) {
+			if (b != otherBody) {
 				try {
 					V2d forceByOtherBody = b.computeRepulsiveForceBy(otherBody);
 					totalForce.sum(forceByOtherBody);

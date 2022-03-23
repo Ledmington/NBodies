@@ -24,7 +24,7 @@ public class P2d {
     	return x;
     }
 
-    public double getY() {
+	public double getY() {
     	return y;
     }
 }

@@ -2,12 +2,14 @@ package nbodies;
 
 import nbodies.sim.*;
 import nbodies.sim.data.SimulationData;
+import nbodies.sim.data.SimulationDataBuilder;
 import nbodies.sim.data.SimulationDataFactory;
 import nbodies.view.SimulationView;
 
 import java.awt.*;
 
 import static java.lang.Integer.min;
+import static nbodies.sim.data.SimulationDataBuilder.randomBodyIn;
 
 /**
  * Bodies simulation - legacy code: sequential, unstructured
@@ -25,7 +27,14 @@ public class NBodies {
 		int height = (int) screenSize.getHeight();
 		int size = min(width, height) - 100;
 
-		SimulationData data = SimulationDataFactory.testBodySet4_many_bodies();
+		//SimulationData data = SimulationDataFactory.testBodySet4_many_bodies();
+		SimulationData data = new SimulationDataBuilder()
+				.numBodies(1000)
+				.bodies(randomBodyIn(-1, 1, -1, 1))
+				.bounds(new Boundary(-6, -6, 6, 6))
+				.deltaTime(0.01)
+				.steps(1000)
+				.build();
 
 		System.out.println(data);
 
