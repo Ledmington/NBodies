@@ -32,6 +32,7 @@ public class MultiThreadSimulator extends AbstractSimulator {
 				t.join();
 			} catch (InterruptedException ignored) {}
 		});
+		running = false;
 	}
 
 	public void start() {
@@ -42,6 +43,7 @@ public class MultiThreadSimulator extends AbstractSimulator {
 	}
 
 	public void stop() {
+		if(!running) return;
 		workers.forEach(Worker::pause);
 		running = false;
 	}

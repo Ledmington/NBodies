@@ -25,35 +25,7 @@ public class VisualiserFrame extends JFrame {
 		panel = new VisualiserPanel(w, h, listener);
 		getContentPane().add(panel, BorderLayout.CENTER);
 
-		JPanel topBar = new JPanel();
-
-		JButton startButton = new JButton("Start");
-		startButton.addActionListener(e -> NBodies.getSimulator().start());
-		topBar.add(startButton);
-		JButton stopButton = new JButton("Stop");
-		stopButton.addActionListener(e -> NBodies.getSimulator().stop());
-		topBar.add(stopButton);
-		JLabel statusLabel = new JLabel("Status: ");
-		topBar.add(statusLabel);
-
-		Thread statusUpdaterThread = new Thread(() -> {
-			while(true) {
-				// TODO avoid this null check
-				if(NBodies.getSimulator() != null) {
-					if (NBodies.getSimulator().isRunning()) {
-						statusLabel.setText("Status: running");
-					} else {
-						statusLabel.setText("Status: stopped");
-					}
-				}
-				try {
-					Thread.sleep(100);
-				} catch (InterruptedException ignored) {}
-			}
-		});
-		statusUpdaterThread.start();
-
-		getContentPane().add(topBar, BorderLayout.NORTH);
+		getContentPane().add(new ControlBar(), BorderLayout.NORTH);
 
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setVisible(true);
