@@ -7,6 +7,7 @@ import java.time.*;
 import java.util.ArrayList;
 
 public class SimulationData {
+	private final int nThreads;
 	private final ArrayList<Body> bodies;
 	private final Boundary bounds;
 	private double vt = 0;
@@ -16,7 +17,8 @@ public class SimulationData {
 	private Instant beginning;
 	private Instant lastIteration = null;
 
-	public SimulationData(final ArrayList<Body> bodies, final Boundary bounds, final double dt, final long nsteps) {
+	public SimulationData(final ArrayList<Body> bodies, final Boundary bounds, final double dt, final long nsteps, final int nThreads) {
+		this.nThreads = nThreads;
 		this.bodies = bodies;
 		this.bounds = bounds;
 		this.dt = dt;
@@ -24,7 +26,7 @@ public class SimulationData {
 	}
 
 	public SimulationData(final ArrayList<Body> bodies, final Boundary bounds) {
-		this(bodies, bounds, 0.001, 50000);
+		this(bodies, bounds, 0.001, 50000, Runtime.getRuntime().availableProcessors());
 	}
 
 	public void nextIteration() {
@@ -59,6 +61,10 @@ public class SimulationData {
 
 	public long getIteration() {
 		return iter;
+	}
+
+	public int getNThreads() {
+		return nThreads;
 	}
 
 	public boolean isFinished() {

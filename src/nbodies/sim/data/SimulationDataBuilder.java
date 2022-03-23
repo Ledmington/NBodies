@@ -15,6 +15,7 @@ public class SimulationDataBuilder {
 	private Boundary bounds;
 	private double dt = 0.001;
 	private long steps = 50000;
+	private int nth = Runtime.getRuntime().availableProcessors();
 
 	public SimulationDataBuilder bodies(final Supplier<Body> bodyCreator) {
 		bodySupplier = bodyCreator;
@@ -38,6 +39,14 @@ public class SimulationDataBuilder {
 
 	public SimulationDataBuilder steps(final long steps) {
 		this.steps = steps;
+		return this;
+	}
+
+	public SimulationDataBuilder threads(final int n) {
+		if(n < 1) {
+			throw new IllegalArgumentException("Number of threads can't be negative or zero.");
+		}
+		this.nth = n;
 		return this;
 	}
 
@@ -65,6 +74,6 @@ public class SimulationDataBuilder {
 			bodies.add(bodySupplier.get());
 		}
 
-		return new SimulationData(bodies, bounds, dt, steps);
+		return new SimulationData(bodies, bounds, dt, steps, nth);
 	}
 }
