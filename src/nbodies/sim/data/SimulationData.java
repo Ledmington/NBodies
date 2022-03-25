@@ -4,6 +4,7 @@ import nbodies.Body;
 import nbodies.Boundary;
 import nbodies.utils.barrier.Barrier;
 import nbodies.utils.barrier.ReusableBarrier;
+import nbodies.utils.stats.Statistics;
 
 import java.time.*;
 import java.util.ArrayList;
@@ -21,6 +22,8 @@ public class SimulationData {
 
 	private Instant beginning;
 	private Instant lastIteration = null;
+	
+	private final Statistics FPSstats = new Statistics();
 
 	public SimulationData(final ArrayList<Body> bodies, final Boundary bounds, final double dt, final long nsteps, final int nThreads) {
 		this.nThreads = nThreads;
@@ -50,6 +53,7 @@ public class SimulationData {
 			Instant newIteration = Instant.now();
 			Duration timeElapsed = Duration.between(lastIteration, newIteration);
 			lastIteration = newIteration;
+			FPSstats.add((double)(timeElapsed.toMillis()));
 		}
 	}
 
@@ -83,6 +87,10 @@ public class SimulationData {
 
 	public boolean isFinished() {
 		return iter >= steps;
+	}
+
+	public Statistics getFPSStats() {
+		return FPSstats;
 	}
 
 	public String getETA() {

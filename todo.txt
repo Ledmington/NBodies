@@ -1,7 +1,3 @@
-Add FPS counter in the GUI
-
-Measure computation time of each frame and show: min, max and avg
-
 Measure performance
 
 fix deadlock when clicking start right after stop

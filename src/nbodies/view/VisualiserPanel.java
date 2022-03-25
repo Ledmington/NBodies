@@ -4,6 +4,7 @@ import nbodies.Body;
 import nbodies.Boundary;
 import nbodies.P2d;
 import nbodies.sim.data.SimulationData;
+import nbodies.utils.stats.Statistics;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,13 +12,8 @@ import java.util.ArrayList;
 
 public class VisualiserPanel extends JPanel {
 
-	private ArrayList<Body> bodies;
-	private Boundary bounds;
+	private SimulationData data;
 	private final MovingArrowsListener listener;
-
-	private long nIter;
-	private double vt;
-	private String eta;
 
 	private final int dx;
 	private final int dy;
@@ -45,6 +41,8 @@ public class VisualiserPanel extends JPanel {
 	}
 
 	public void paint(Graphics g){
+		ArrayList<Body> bodies = data.getBodies();
+		Boundary bounds = data.getBounds();
 		if (bodies != null) {
 			Graphics2D g2 = (Graphics2D) g;
 
@@ -70,12 +68,14 @@ public class VisualiserPanel extends JPanel {
 			});
 
 			double totalMod = bodies.stream().mapToDouble(b -> b.getVel().mod()).sum();
+			Statistics spf = data.getFPSStats(); // seconds-per-frame
 
-			String time = String.format("%.2f", vt);
-			g2.drawString("Bodies: " + bodies.size() + " - vt: " + time + " - nIter: " + nIter, 2, 10);
+			String time = String.format("%.2f", data.getTime());
+			g2.drawString("Bodies: " + bodies.size() + " - vt: " + time + " - nIter: " + data.getIteration(), 2, 10);
 			g2.drawString(String.format("Total velocity: %.3e", totalMod), 2, 25);
-			g2.drawString("Remaining time: "+this.eta, 2, 40);
-			g2.drawString("(+/- to zoom, arrows to move around)", 2, 55);
+			g2.drawString("Remaining time: "+data.getETA(), 2, 40);
+			g2.drawString(String.format("ms per frame -> min: %.3f, max: %.3f, avg: %.3f", spf.getMin(), spf.getMax(), spf.getAvg()), 2, 55);
+			g2.drawString("(+/- to zoom, arrows to move around)", 2, 70);
 		}
 	}
 
@@ -88,10 +88,6 @@ public class VisualiserPanel extends JPanel {
 	}
 
 	public void display(final SimulationData data) {
-		this.bodies = data.getBodies();
-		this.bounds = data.getBounds();
-		this.vt = data.getTime();
-		this.nIter = data.getIteration();
-		this.eta = data.getETA();
+		this.data = data;
 	}
 }
