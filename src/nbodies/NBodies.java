@@ -17,8 +17,13 @@ import static nbodies.sim.data.SimulationDataBuilder.randomBodyIn;
 public class NBodies {
 
 	private static Simulator sim;
+	private static final boolean USE_GUI = true;
 
     public static void main(String[] args) {
+		if(USE_GUI) {
+			System.out.println("Press Start to start the simulation.\n");
+		}
+
 		System.out.println(Runtime.getRuntime().availableProcessors() + " cores available");
 
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -37,11 +42,17 @@ public class NBodies {
 
 		System.out.println(data);
 
-    	new SimulationView(size, size, data);
-
-    	//sim = new SequentialSimulator(data);
+		//sim = new SequentialSimulator(data);
 		//sim = new ExecutorSimulator(data);
 		sim = new MultiThreadSimulator(data);
+
+		if(USE_GUI) {
+			new SimulationView(size, size, data);
+		} else {
+			sim.execute();
+		}
+
+		// TODO print report
     }
 
 	public static Simulator getSimulator() {

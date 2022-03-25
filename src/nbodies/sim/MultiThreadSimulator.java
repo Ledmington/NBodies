@@ -27,6 +27,15 @@ public class MultiThreadSimulator extends AbstractSimulator {
 			workers.add(w);
 			w.start();
 		}
+
+		Thread waitingThread = new Thread(() -> {
+			for(Worker w : workers) {
+				try {
+					w.join();
+				} catch (InterruptedException ignored) {}
+			}
+			running = false;
+		});
 	}
 
 	public void start() {
