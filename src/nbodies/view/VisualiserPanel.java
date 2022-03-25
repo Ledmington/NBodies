@@ -3,6 +3,7 @@ package nbodies.view;
 import nbodies.Body;
 import nbodies.Boundary;
 import nbodies.P2d;
+import nbodies.sim.data.SimulationData;
 
 import javax.swing.*;
 import java.awt.*;
@@ -86,11 +87,11 @@ public class VisualiserPanel extends JPanel {
 		return (int)(getYCenter() - y*dy*getScale());
 	}
 
-	public void display(ArrayList<Body> bodies, double vt, long iter, Boundary bounds, String eta) {
-		this.bodies = bodies;
-		this.bounds = bounds;
-		this.vt = vt;
-		this.nIter = iter;
-		this.eta = eta;
+	public void display(final SimulationData data) {
+		this.bodies = data.getBodies();
+		this.bounds = data.getBounds();
+		this.vt = data.getTime();
+		this.nIter = data.getIteration();
+		this.eta = data.getETA();
 	}
 }

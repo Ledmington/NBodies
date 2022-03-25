@@ -1,6 +1,7 @@
 package nbodies.view;
 
 import nbodies.*;
+import nbodies.sim.data.SimulationData;
 
 import javax.swing.*;
 import java.awt.*;
@@ -32,10 +33,10 @@ public class VisualiserFrame extends JFrame {
 		this.pack();
 	}
 
-	public void display(ArrayList<Body> bodies, double vt, long iter, Boundary bounds, String eta){
+	public void display(final SimulationData data){
 		try {
 			SwingUtilities.invokeAndWait(() -> {
-				panel.display(bodies, vt, iter, bounds, eta);
+				panel.display(data);
 				repaint();
 			});
 		} catch (Exception ignored) {}

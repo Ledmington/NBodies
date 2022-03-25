@@ -42,7 +42,6 @@ public class NBodies {
     	//sim = new SequentialSimulator(data);
 		//sim = new ExecutorSimulator(data);
 		sim = new MultiThreadSimulator(data);
-        sim.execute(50000);
     }
 
 	public static Simulator getSimulator() {

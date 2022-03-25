@@ -10,8 +10,8 @@ public class SequentialSimulator extends AbstractSimulator {
 		super(data);
 	}
 	
-	public void execute(long nSteps) {
-		while (data.getIteration() < nSteps) {
+	public void execute() {
+		while (!data.isFinished()) {
 			//System.out.println(iter + " out of " + nSteps); // TODO remove if not needed
 
 			/* update bodies velocity */

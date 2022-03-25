@@ -16,11 +16,11 @@ public class ExecutorSimulator extends AbstractSimulator {
 		executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 	}
 
-	public void execute(long nSteps) {
+	public void execute() {
 		final Map<Body, Future<V2d>> waitingTasks = new HashMap<>();
 		final Map<Body, V2d> totalForces = new HashMap<>();
 
-		while (data.getIteration() < nSteps) {
+		while (!data.isFinished()) {
 			//System.out.println(iter + " out of " + nSteps); // TODO remove if not needed
 
 			for (Body b : getBodies()) {

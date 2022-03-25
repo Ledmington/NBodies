@@ -19,7 +19,7 @@ public class MultiThreadSimulator extends AbstractSimulator {
 		endIteration = new ReusableBarrier(data.getNThreads());
 	}
 
-	public void execute(long nSteps) {
+	public void execute() {
 		running = true;
 		workers = new ArrayList<>();
 		for (int i=0; i<data.getNThreads(); i++) {
@@ -27,12 +27,6 @@ public class MultiThreadSimulator extends AbstractSimulator {
 			workers.add(w);
 			w.start();
 		}
-		workers.forEach(t -> {
-			try {
-				t.join();
-			} catch (InterruptedException ignored) {}
-		});
-		running = false;
 	}
 
 	public void start() {
