@@ -33,6 +33,7 @@ public class NBodies {
 
 		//SimulationData data = SimulationDataFactory.testBodySet4_many_bodies();
 		SimulationData data = SimulationData.builder()
+				//.threads(1) // uncomment to use serial
 				.numBodies(1000)
 				.bodies(randomBodyIn(-1, 1, -1, 1))
 				.bounds(new Boundary(-6, -6, 6, 6))

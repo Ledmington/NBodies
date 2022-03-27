@@ -110,18 +110,18 @@ public class Body {
     	double y = pos.getY();
 
         if (x > bounds.getXMax()) {
-            pos.change(bounds.getXMax(), y);
+			pos.setX(bounds.getXMax());
             vel.change(-vel.getX(), vel.getY());
         } else if (x < bounds.getXMin()) {
-            pos.change(bounds.getXMin(), y);
+			pos.setX(bounds.getXMin());
             vel.change(-vel.getX(), vel.getY());
         }
 
 		if (y > bounds.getYMax()) {
-            pos.change(x, bounds.getYMax());
+			pos.setY(bounds.getYMax());
             vel.change(vel.getX(), -vel.getY());
         } else if (y < bounds.getYMin()) {
-            pos.change(x, bounds.getYMin());
+			pos.setY(bounds.getYMin());
             vel.change(vel.getX(), -vel.getY());
         }
     }
