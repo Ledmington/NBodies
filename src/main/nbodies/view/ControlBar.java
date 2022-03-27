@@ -6,11 +6,13 @@ import javax.swing.*;
 
 public class ControlBar extends JPanel {
 
+	private final JButton startButton;
+	private final JButton stopButton;
 	private final JLabel statusLabel;
 	private boolean neverStarted = true;
 
 	public ControlBar() {
-		JButton startButton = new JButton("Start");
+		startButton = new JButton("Start");
 		startButton.addActionListener(e -> {
 			if(neverStarted) {
 				NBodies.getSimulator().execute();
@@ -18,21 +20,25 @@ public class ControlBar extends JPanel {
 			} else {
 				NBodies.getSimulator().start();
 			}
-			checkAndUpdateStatus();
 		});
 		add(startButton);
 
-		JButton stopButton = new JButton("Stop");
-		stopButton.addActionListener(e -> {
-			NBodies.getSimulator().stop();
-			checkAndUpdateStatus();
-		});
+		stopButton = new JButton("Stop");
+		stopButton.addActionListener(e -> NBodies.getSimulator().stop());
 		add(stopButton);
 
 		statusLabel = new JLabel("Status: ");
 		add(statusLabel);
 
-		SwingUtilities.invokeLater(this::checkAndUpdateStatus);
+		Thread statusUpdaterThread = new Thread(() -> {
+			while(true) {
+				try {
+					Thread.sleep(50);
+				} catch (InterruptedException ignored) {}
+				checkAndUpdateStatus();
+			}
+		});
+		statusUpdaterThread.start();
 	}
 
 	private void checkAndUpdateStatus() {
@@ -41,8 +47,12 @@ public class ControlBar extends JPanel {
 
 		if (NBodies.getSimulator().isRunning()) {
 			statusLabel.setText("Status: running");
+			stopButton.setEnabled(true);
+			startButton.setEnabled(false);
 		} else {
 			statusLabel.setText("Status: stopped");
+			stopButton.setEnabled(false);
+			startButton.setEnabled(true);
 		}
 	}
 }
