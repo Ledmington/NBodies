@@ -1,3 +1,5 @@
+Synchronize the GUI (reinsert the "display" method)
+
 Measure performance
 
 fix deadlock when clicking start right after stop
