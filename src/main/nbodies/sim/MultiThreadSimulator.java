@@ -36,6 +36,7 @@ public class MultiThreadSimulator extends AbstractSimulator {
 			}
 			running = false;
 		});
+		waitingThread.start();
 	}
 
 	public void start() {
