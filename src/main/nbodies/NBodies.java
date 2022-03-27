@@ -17,7 +17,7 @@ import static nbodies.sim.data.SimulationDataBuilder.randomBodyIn;
 public class NBodies {
 
 	private static Simulator sim;
-	private static final boolean USE_GUI = true;
+	private static final boolean USE_GUI = false;
 
     public static void main(String[] args) {
 		if(USE_GUI) {
@@ -34,11 +34,11 @@ public class NBodies {
 		//SimulationData data = SimulationDataFactory.testBodySet4_many_bodies();
 		SimulationData data = SimulationData.builder()
 				//.threads(1) // uncomment to use serial
-				.numBodies(1000)
+				.numBodies(100)
 				.bodies(randomBodyIn(-1, 1, -1, 1))
 				.bounds(new Boundary(-6, -6, 6, 6))
 				.deltaTime(0.01)
-				.steps(10000)
+				.steps(1000)
 				.build();
 
 		System.out.println(data);
@@ -53,7 +53,15 @@ public class NBodies {
 			sim.execute();
 		}
 
-		// TODO print report
+		// Printing total time
+		while(!data.isFinished()) {
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException ignored) {}
+		}
+
+		final double seconds = (double)(data.getTotalTime().toMillis()) / 1000;
+		System.out.println("Total time of execution: " + seconds + " seconds");
     }
 
 	public static Simulator getSimulator() {

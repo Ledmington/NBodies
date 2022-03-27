@@ -22,6 +22,7 @@ public class SimulationData {
 
 	private Instant beginning;
 	private Instant lastIteration = null;
+	private Duration totalTime = null;
 	
 	private final Statistics FPSstats = new Statistics();
 
@@ -43,6 +44,8 @@ public class SimulationData {
 	}
 
 	public void nextIteration() {
+		if(isFinished()) return;
+
 		vt += dt;
 		iter++;
 
@@ -54,6 +57,10 @@ public class SimulationData {
 			Duration timeElapsed = Duration.between(lastIteration, newIteration);
 			lastIteration = newIteration;
 			FPSstats.add((double)(timeElapsed.toMillis()));
+		}
+
+		if(isFinished()) {
+			totalTime = Duration.between(beginning, Instant.now());
 		}
 	}
 
@@ -103,6 +110,10 @@ public class SimulationData {
 		long seconds = remainingMillis / 1000;
 		remainingMillis %= 1000;
 		return String.format("%2d:%02d:%03d", minutes, seconds, remainingMillis);
+	}
+
+	public Duration getTotalTime() {
+		return totalTime;
 	}
 
 	public String toString() {
