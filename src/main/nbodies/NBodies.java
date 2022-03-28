@@ -35,7 +35,7 @@ public class NBodies {
 		//SimulationData data = SimulationDataFactory.testBodySet4_many_bodies();
 		SimulationData data = SimulationData.builder()
 				//.threads(1) // uncomment to use serial
-				.numBodies(5000)
+				.numBodies(1000)
 				.bodies(randomBodyIn(-1, 1, -1, 1))
 				.bounds(new Boundary(-6, -6, 6, 6))
 				.deltaTime(0.01)
@@ -43,6 +43,8 @@ public class NBodies {
 				.build();
 
 		System.out.println(data);
+		System.out.println("Repulsive constant: " + Body.REPULSIVE_CONST);
+		System.out.println("Friction constant: " + Body.FRICTION_CONST);
 
 		//sim = new SequentialSimulator(data);
 		//sim = new ExecutorSimulator(data);
@@ -63,7 +65,7 @@ public class NBodies {
 		}
 
 		final double seconds = (double) (data.getTotalTime().toMillis()) / 1000;
-		System.out.println("Total time of execution: " + seconds + " seconds");
+		System.out.println("\nTotal time of execution: " + seconds + " seconds");
 	}
 
 	public static Simulator getSimulator() {

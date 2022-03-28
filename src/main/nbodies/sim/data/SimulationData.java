@@ -120,7 +120,6 @@ public class SimulationData {
 				"Boundaries:\n" +
 				"\tx: [" + bounds.getXMin() + ", " + bounds.getXMax() + "]\n" +
 				"\ty: [" + bounds.getYMin() + ", " + bounds.getYMax() + "]\n" +
-				"delta time: " + dt +
-				"\n";
+				"delta time: " + dt;
 	}
 }

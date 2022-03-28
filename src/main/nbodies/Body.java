@@ -6,8 +6,8 @@ package nbodies;
  */
 public class Body {
 
-	private static final double REPULSIVE_CONST = 0.01;
-	private static final double FRICTION_CONST = 10;
+	public static final double REPULSIVE_CONST = 0.01;
+	public static final double FRICTION_CONST = 1;
 
 	private final P2d pos;
 	private final V2d vel;
