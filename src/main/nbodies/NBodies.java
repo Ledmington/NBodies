@@ -3,6 +3,7 @@ package nbodies;
 import nbodies.sim.MultiThreadSimulator;
 import nbodies.sim.Simulator;
 import nbodies.sim.data.SimulationData;
+import nbodies.sim.data.SimulationDataFactory;
 import nbodies.view.SimulationView;
 
 import java.awt.*;
@@ -32,15 +33,17 @@ public class NBodies {
 		int height = (int) screenSize.getHeight();
 		int size = min(width, height) - 100;
 
-		//SimulationData data = SimulationDataFactory.testBodySet4_many_bodies();
-		SimulationData data = SimulationData.builder()
+		final SimulationData data;
+		data = SimulationDataFactory.testBodySet4_many_bodies();
+		/*data = SimulationData.builder()
 				//.threads(1) // uncomment to use serial
 				.numBodies(1000)
 				.bodies(randomBodyIn(-1, 1, -1, 1))
 				.bounds(new Boundary(-6, -6, 6, 6))
 				.deltaTime(0.01)
 				.steps(10_000)
-				.build();
+				.build();*/
+		//data = SimulationDataFactory.circle(100);
 
 		System.out.println(data);
 		System.out.println("Repulsive constant: " + Body.REPULSIVE_CONST);
