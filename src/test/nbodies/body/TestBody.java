@@ -25,7 +25,7 @@ public class TestBody {
 	}
 
 	private Body body(final double x, final double y) {
-		return new Body(new P2d(x,y), new V2d(0,0), 1);
+		return new Body(new P2d(x, y), new V2d(0, 0), 1);
 	}
 
 	private boolean inside(final Body b) {
@@ -42,7 +42,7 @@ public class TestBody {
 
 	@Test
 	public void bodyTooMuchRight() {
-		b = body(bounds.getXMax()+EPS, 0);
+		b = body(bounds.getXMax() + EPS, 0);
 		assertFalse(inside(b));
 		b.checkAndSolveBoundaryCollision(bounds);
 		assertTrue(inside(b));
@@ -50,7 +50,7 @@ public class TestBody {
 
 	@Test
 	public void bodyTooMuchLeft() {
-		b = body(bounds.getXMin()-EPS, 0);
+		b = body(bounds.getXMin() - EPS, 0);
 		assertFalse(inside(b));
 		b.checkAndSolveBoundaryCollision(bounds);
 		assertTrue(inside(b));
@@ -58,7 +58,7 @@ public class TestBody {
 
 	@Test
 	public void bodyTooMuchUp() {
-		b = body(0, bounds.getYMax()+EPS);
+		b = body(0, bounds.getYMax() + EPS);
 		assertFalse(inside(b));
 		b.checkAndSolveBoundaryCollision(bounds);
 		assertTrue(inside(b));
@@ -66,7 +66,7 @@ public class TestBody {
 
 	@Test
 	public void bodyTooMuchDown() {
-		b = body(0, bounds.getYMin()-EPS);
+		b = body(0, bounds.getYMin() - EPS);
 		assertFalse(inside(b));
 		b.checkAndSolveBoundaryCollision(bounds);
 		assertTrue(inside(b));
@@ -81,7 +81,7 @@ public class TestBody {
 				body(bounds.getXMax(), bounds.getYMax())  // SE
 		);
 
-		for(Body b : corners) {
+		for (Body b : corners) {
 			assertTrue(inside(b));
 			final P2d oldPos = b.getPos();
 			b.checkAndSolveBoundaryCollision(bounds);
@@ -92,24 +92,24 @@ public class TestBody {
 	@Test
 	public void outFromCorners() {
 		List<Body> corners = Stream.of(
-					body(bounds.getXMin(), bounds.getYMin()), // NW
-					body(bounds.getXMax(), bounds.getYMin()), // NE
-					body(bounds.getXMin(), bounds.getYMax()), // SW
-					body(bounds.getXMax(), bounds.getYMax())  // SE
+						body(bounds.getXMin(), bounds.getYMin()), // NW
+						body(bounds.getXMax(), bounds.getYMin()), // NE
+						body(bounds.getXMin(), bounds.getYMax()), // SW
+						body(bounds.getXMax(), bounds.getYMax())  // SE
 				)
 				.flatMap(b -> {
 					final double x = b.getPos().getX();
 					final double y = b.getPos().getY();
 					return Stream.of(
-							body(x-EPS, y-EPS), body(x, y-EPS), body(x+EPS, y-EPS),
-							body(x-EPS, y),        body(x, y),        body(x+EPS, y),
-							body(x-EPS, y+EPS), body(x, y+EPS), body(x+EPS, y+EPS)
+							body(x - EPS, y - EPS), body(x, y - EPS), body(x + EPS, y - EPS),
+							body(x - EPS, y), body(x, y), body(x + EPS, y),
+							body(x - EPS, y + EPS), body(x, y + EPS), body(x + EPS, y + EPS)
 					);
 				})
 				.filter(b -> !inside(b))
 				.toList();
 
-		for(Body b : corners) {
+		for (Body b : corners) {
 			assertFalse(inside(b)); // double check that they are inside
 			final P2d oldPos = b.getPos();
 			b.checkAndSolveBoundaryCollision(bounds);

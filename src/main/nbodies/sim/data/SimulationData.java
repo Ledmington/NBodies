@@ -6,25 +6,23 @@ import nbodies.utils.barrier.Barrier;
 import nbodies.utils.barrier.ReusableBarrier;
 import nbodies.utils.stats.Statistics;
 
-import java.time.*;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 
 public class SimulationData {
 	private final int nThreads;
 	private final ArrayList<Body> bodies;
 	private final Boundary bounds;
-	private double vt = 0;
 	private final double dt;
-	private long iter = 0;
 	private final long steps;
-
 	private final Barrier pause;
-
+	private final Statistics FPSstats = new Statistics();
+	private double vt = 0;
+	private long iter = 0;
 	private Instant beginning;
 	private Instant lastIteration = null;
 	private Duration totalTime = null;
-	
-	private final Statistics FPSstats = new Statistics();
 
 	public SimulationData(final ArrayList<Body> bodies, final Boundary bounds, final double dt, final long nsteps, final int nThreads) {
 		this.nThreads = nThreads;
@@ -32,7 +30,7 @@ public class SimulationData {
 		this.bounds = bounds;
 		this.dt = dt;
 		this.steps = nsteps;
-		pause = new ReusableBarrier(nThreads+1);
+		pause = new ReusableBarrier(nThreads + 1);
 	}
 
 	public SimulationData(final ArrayList<Body> bodies, final Boundary bounds) {
@@ -44,7 +42,7 @@ public class SimulationData {
 	}
 
 	public void nextIteration() {
-		if(isFinished()) return;
+		if (isFinished()) return;
 
 		vt += dt;
 		iter++;
@@ -56,10 +54,10 @@ public class SimulationData {
 			Instant newIteration = Instant.now();
 			Duration timeElapsed = Duration.between(lastIteration, newIteration);
 			lastIteration = newIteration;
-			FPSstats.add((double)(timeElapsed.toMillis()));
+			FPSstats.add((double) (timeElapsed.toMillis()));
 		}
 
-		if(isFinished()) {
+		if (isFinished()) {
 			totalTime = Duration.between(beginning, Instant.now());
 		}
 	}
@@ -101,9 +99,9 @@ public class SimulationData {
 	}
 
 	public String getETA() {
-		if(beginning == null) return "";
+		if (beginning == null) return "";
 		Duration elapsed = Duration.between(beginning, Instant.now());
-		double msForEachIteration = (double)elapsed.toMillis() / (double)iter;
+		double msForEachIteration = (double) elapsed.toMillis() / (double) iter;
 		long remainingMillis = (long) (msForEachIteration * (steps - iter));
 		long minutes = remainingMillis / 60_000;
 		remainingMillis %= 60_000;

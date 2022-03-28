@@ -1,17 +1,15 @@
 package nbodies.view;
 
-import nbodies.*;
 import nbodies.sim.data.SimulationData;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
 
 public class VisualiserFrame extends JFrame {
 
 	private final VisualiserPanel panel;
 
-	public VisualiserFrame(int w, int h){
+	public VisualiserFrame(int w, int h) {
 		setTitle("N-Bodies Simulation");
 		setSize(w, h);
 		setMinimumSize(new Dimension(w, h));
@@ -33,12 +31,13 @@ public class VisualiserFrame extends JFrame {
 		this.pack();
 	}
 
-	public void display(final SimulationData data){
+	public void display(final SimulationData data) {
 		try {
 			SwingUtilities.invokeAndWait(() -> {
 				panel.display(data);
 				repaint();
 			});
-		} catch (Exception ignored) {}
+		} catch (Exception ignored) {
+		}
 	}
 }

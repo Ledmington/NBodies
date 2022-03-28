@@ -33,7 +33,8 @@ public abstract class AbstractSimulator implements Simulator {
 				try {
 					V2d forceByOtherBody = b.computeRepulsiveForceBy(otherBody);
 					totalForce.sum(forceByOtherBody);
-				} catch (Exception ignored) {}
+				} catch (Exception ignored) {
+				}
 			}
 		}
 

@@ -8,10 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MultiThreadSimulator extends AbstractSimulator {
-	
-	private List<Worker> workers;
+
 	private final Barrier endCompute;
 	private final Barrier endIteration;
+	private List<Worker> workers;
 
 	public MultiThreadSimulator(final SimulationData data) {
 		super(data);
@@ -22,17 +22,18 @@ public class MultiThreadSimulator extends AbstractSimulator {
 	public void execute() {
 		running = true;
 		workers = new ArrayList<>();
-		for (int i=0; i<data.getNThreads(); i++) {
+		for (int i = 0; i < data.getNThreads(); i++) {
 			Worker w = new Worker(i, data, endCompute, endIteration, this::computeTotalForceOnBody);
 			workers.add(w);
 			w.start();
 		}
 
 		Thread waitingThread = new Thread(() -> {
-			for(Worker w : workers) {
+			for (Worker w : workers) {
 				try {
 					w.join();
-				} catch (InterruptedException ignored) {}
+				} catch (InterruptedException ignored) {
+				}
 			}
 			running = false;
 		});
@@ -40,14 +41,14 @@ public class MultiThreadSimulator extends AbstractSimulator {
 	}
 
 	public void start() {
-		if(running) return;
+		if (running) return;
 		workers.forEach(Worker::wakeUp);
 		running = true;
 		data.getPause().hitAndWaitAll();
 	}
 
 	public void stop() {
-		if(!running) return;
+		if (!running) return;
 		workers.forEach(Worker::pause);
 		running = false;
 	}

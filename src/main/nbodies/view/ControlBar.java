@@ -14,7 +14,7 @@ public class ControlBar extends JPanel {
 	public ControlBar() {
 		startButton = new JButton("Start");
 		startButton.addActionListener(e -> {
-			if(neverStarted) {
+			if (neverStarted) {
 				NBodies.getSimulator().execute();
 				neverStarted = false;
 			} else {
@@ -31,10 +31,11 @@ public class ControlBar extends JPanel {
 		add(statusLabel);
 
 		Thread statusUpdaterThread = new Thread(() -> {
-			while(true) {
+			while (true) {
 				try {
 					Thread.sleep(50);
-				} catch (InterruptedException ignored) {}
+				} catch (InterruptedException ignored) {
+				}
 				checkAndUpdateStatus();
 			}
 		});
@@ -43,7 +44,7 @@ public class ControlBar extends JPanel {
 
 	private void checkAndUpdateStatus() {
 		// TODO avoid this null check
-		if(NBodies.getSimulator() == null) return;
+		if (NBodies.getSimulator() == null) return;
 
 		if (NBodies.getSimulator().isRunning()) {
 			statusLabel.setText("Status: running");

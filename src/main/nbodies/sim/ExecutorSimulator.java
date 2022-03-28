@@ -4,7 +4,8 @@ import nbodies.Body;
 import nbodies.V2d;
 import nbodies.sim.data.SimulationData;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.*;
 
 public class ExecutorSimulator extends AbstractSimulator {
@@ -68,7 +69,8 @@ public class ExecutorSimulator extends AbstractSimulator {
 		executor.shutdown();
 		try {
 			boolean b = executor.awaitTermination(1000_000_000, TimeUnit.SECONDS);
-		} catch (InterruptedException ignored) {}
+		} catch (InterruptedException ignored) {
+		}
 	}
 
 	public boolean isRunning() {

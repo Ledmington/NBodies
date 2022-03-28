@@ -33,15 +33,15 @@ public class Worker extends Thread {
 
 		// partition indices
 		final int start = bodies.size() * id / data.getNThreads();
-		final int end = bodies.size() * (id+1) / data.getNThreads();
+		final int end = bodies.size() * (id + 1) / data.getNThreads();
 
 		final List<Body> myBodies = bodies.subList(start, end);
-		final List<V2d> tmpForces = Stream.generate(() -> new V2d(0,0))
+		final List<V2d> tmpForces = Stream.generate(() -> new V2d(0, 0))
 				.limit(myBodies.size())
 				.collect(Collectors.toList());
 
 		while (!data.isFinished()) {
-			while(paused) {
+			while (paused) {
 				data.getPause().hitAndWaitAll();
 			}
 
@@ -59,7 +59,7 @@ public class Worker extends Thread {
 				b.checkAndSolveBoundaryCollision(data.getBounds());
 			}
 
-			if(id == 0) {
+			if (id == 0) {
 				data.nextIteration();
 			}
 			endIteration.hitAndWaitAll();

@@ -8,14 +8,14 @@ public class Statistics {
 	private int nElements = 0;
 
 	public void add(double newValue) {
-		if(nElements == 0) {
+		if (nElements == 0) {
 			tmpMin = newValue;
 			tmpMax = newValue;
 			tmpAvg = newValue;
 		} else {
 			tmpMin = Math.min(tmpMin, newValue);
 			tmpMax = Math.max(tmpMax, newValue);
-			tmpAvg = (tmpAvg * nElements + newValue) / (nElements+1);
+			tmpAvg = (tmpAvg * nElements + newValue) / (nElements + 1);
 		}
 		nElements++;
 	}

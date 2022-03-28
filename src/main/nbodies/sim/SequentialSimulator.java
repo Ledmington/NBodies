@@ -9,7 +9,7 @@ public class SequentialSimulator extends AbstractSimulator {
 	public SequentialSimulator(final SimulationData data) {
 		super(data);
 	}
-	
+
 	public void execute() {
 		while (!data.isFinished()) {
 			//System.out.println(iter + " out of " + nSteps); // TODO remove if not needed

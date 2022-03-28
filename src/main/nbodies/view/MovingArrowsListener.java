@@ -12,8 +12,8 @@ public class MovingArrowsListener implements KeyListener {
 	private int y;
 
 	public MovingArrowsListener(int w, int h) {
-		x = w/2 - 20;
-		y = h/2 - 20;
+		x = w / 2 - 20;
+		y = h / 2 - 20;
 	}
 
 	public void keyPressed(KeyEvent e) {
@@ -30,8 +30,11 @@ public class MovingArrowsListener implements KeyListener {
 		}
 	}
 
-	public void keyReleased(KeyEvent e) {}
-	public void keyTyped(KeyEvent e) {}
+	public void keyReleased(KeyEvent e) {
+	}
+
+	public void keyTyped(KeyEvent e) {
+	}
 
 	public double getScale() {
 		return scale;

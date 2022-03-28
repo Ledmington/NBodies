@@ -36,20 +36,21 @@ public class TestTime {
 		final List<Integer> steps = List.of(50_000);
 		final int attempts = 1;
 
-		for(Integer nb : bodies) {
-			for(Integer ns : steps) {
+		for (Integer nb : bodies) {
+			for (Integer ns : steps) {
 				System.out.print(nb + " bodies, " + ns + " steps\n times: ");
 				List<Double> times = new LinkedList<>();
-				for(int i=0; i<attempts; i++) {
+				for (int i = 0; i < attempts; i++) {
 					init(nb, ns);
 
-					while(!data.isFinished()) {
+					while (!data.isFinished()) {
 						try {
 							Thread.sleep(100);
-						} catch (InterruptedException ignored) {}
+						} catch (InterruptedException ignored) {
+						}
 					}
 
-					final double seconds = (double)(data.getTotalTime().toMillis()) / 1000;
+					final double seconds = (double) (data.getTotalTime().toMillis()) / 1000;
 					System.out.print(seconds + "; ");
 					times.add(seconds);
 				}
