@@ -9,7 +9,6 @@
 \usepackage[
 	linesnumbered,
 	ruled,
-	titlenotnumbered,
 	italiano
 ]{algorithm2e}
 
@@ -35,33 +34,64 @@
 	
 	\subsection{Analisi dell'algoritmo}
 	\begin{algorithm}
-		\SetAlgorithmName{Bellman-Ford}{}{}
-		\KwIn{G, w, s}
-		\KwResult{FALSE se il grafo G contiene cicli di costo negativo, TRUE altrimenti}
-		Initialize-Single-Source(G,s)\;
-		\For{i=1 \textbf{to} |G.V| - 1}{
-			\ForEach{edge (u,v) $\in$ G.E}{
-				Relax(u,v,w)\;
+		\SetAlgorithmName{Algoritmo}{}{}
+		\KwIn{B, array dei corpi}
+		\KwIn{bounds, i bordi della simulazione}
+		\KwIn{steps, numero di iterazioni da calcolare}
+		
+		\For{$steps$ times}{
+			\ForEach{Body $b$ in $B$}{
+				computeTotalForces($b$)\;
+			}
+			\ForEach{Body $b$ in $B$}{
+				computeAcceleration($b$)\;
+				updateVelocity($b$)\;
+				updatePosition($b$)\;
+				checkAndSolveBoundaryCollisions($b$)\;
 			}
 		}
-		\ForEach{edge (u,v) $\in$ G.E}{
-			\If{v.d > u.d + w(u,v)}{
-				\Return FALSE\;
-			}
-		}
-		\Return TRUE\;
-		\caption{L'algoritmo di Bellman-Ford}
+		\caption{N-Bodies simulation}
 	\end{algorithm}
 	
 	\subsection{Analisi delle dipendenze tra dati}
 	Questo algoritmo presenta due dipendenze molto importanti:
 	\begin{itemize}
 		\item il risultato di una determinata iterazione $i > 0$ dipende dal risultato dell'iterazione $i-1$
-		\item il risultato dell'aggiornamento dei parametri dei corpi (accelerazione, velocità e posizione) dipende dal risultato del calcolo delle forze
+		\item il risultato dell'aggiornamento dei parametri di un qualsiasi corpo $b_i$ (accelerazione, velocità e posizione) dipende dal risultato del calcolo di tutte le forze repulsive agenti su $b_i$
 	\end{itemize}
 	
 	\section{Design}
-	\subsection{Using two barriers}
+	\subsection{Mutua esclusione}
+	Come emerso dall'analisi dell'algoritmo, non è necessario l'utilizzo di alcun meccanismo di mutua esclusione per evitare letture e scritture concorrenti sui dai dei singoli corpi. Difatti, è sufficiente \textbf{partizionare} l'array globale dei corpi in tante porzioni quanti sono i thread utilizzati, ognuno dei quali si occuperà di aggiornare solamente i corpi della propria partizione.
+	
+	\subsection{Sincronizzazione}
+	Un problema più importante consiste, invece, nella \textbf{sincronizzazione} dei thread al fine di non violare nessuna delle due dipendenze tra dati individuate. Per fare ciò utilizziamo due Barrier, ovvero dei costrutti che permettono la sincronizzazione globale dei thread, come riportato nello pseudocodice di seguito. Le Barrier utilizzate sono implementate nella classe \texttt{nbodies.utils.barrier.ReusableBarrier}.
+	
+	\begin{algorithm}
+		\SetAlgorithmName{Algoritmo}{}{}
+		\KwIn{B, array dei corpi}
+		\KwIn{bounds, i bordi della simulazione}
+		\KwIn{steps, numero di iterazioni da calcolare}
+		
+		partition($B$)\;
+		\For{$steps$ times}{
+			\ForEach{Body $b$ in $B$}{
+				computeTotalForces($b$)\;
+			}
+			barrier()\;
+			\ForEach{Body $b$ in $B$}{
+				computeAcceleration($b$)\;
+				updateVelocity($b$)\;
+				updatePosition($b$)\;
+				checkAndSolveBoundaryCollisions($b$)\;
+			}
+			barrier()\;
+		}
+		\caption{Parallel N-Bodies simulation}
+	\end{algorithm}
+
+	\subsection{GUI}
+	Per evitare un eccessivo overhead della GUI, ho scelto di renderla completamente asincrona rispetto alla simulazione.
 	
 	\section{Dettagli implementativi}
 	Per evitare \textit{overhead} non necessari e per semplificare il codice, ogni \texttt{Worker}, prima di cominciare il ciclo vero e proprio, estrae dalla lista dei corpi una lista di puntatori ai corpi su cui deve operare.
@@ -139,9 +169,4 @@
 		\label{fig:sse-gui}
 	\end{minipage}
 	\hfill
-	
-	\subsection{Profiling}
-	Numero di thread?
-	Utilizzo memoria?
-	\subsection{Throughput}
 \end{document}
