@@ -77,6 +77,42 @@
 	\hfill
 
 	\subsection{Speedup}
+	Valori speedup (misurati con 1000 corpi e 10000 step).
+	\hfill
+	\begin{minipage}{.4\textwidth}
+		Senza GUI
+
+		\begin{tabular}{|c|c|}
+			\hline
+			\textbf{Threads} & \textbf{Time} \\ \hline
+			1 & 84,689 \\ \hline
+			2 & 42,575 \\ \hline
+			3 & 28,473 \\ \hline
+			4 & 22,11 \\ \hline
+			5 & 26,59 \\ \hline
+			6 & 22,603 \\ \hline
+			7 & 19,744 \\ \hline
+			8 & 18,464 \\ \hline
+		\end{tabular}
+	\end{minipage}
+	\hfill
+	\begin{minipage}{.4\textwidth}
+		Con GUI
+
+		\begin{tabular}{|c|c|}
+			\hline
+			\textbf{Threads} & \textbf{Time} \\ \hline
+			1 & 86,474 \\ \hline
+			2 & 42,393 \\ \hline
+			3 & 27,135 \\ \hline
+			4 & 21,44 \\ \hline
+			5 & 27,606 \\ \hline
+			6 & 23,332 \\ \hline
+			7 & 19,645 \\ \hline
+			8 & 18,473 \\ \hline
+		\end{tabular}
+	\end{minipage}
+
 	\begin{tikzpicture}[scale=0.8, domain=0:8]
 		\draw[->] (-0.1,0) -- (8.1,0) node[right] {$x$};
 		\draw[->] (0,-0.1) -- (0,8.1) node[above] {$y$};
