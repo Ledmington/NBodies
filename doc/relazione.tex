@@ -6,6 +6,13 @@
 \usepackage[margin=1in]{geometry}
 \usepackage{graphicx}
 
+\usepackage[
+	linesnumbered,
+	ruled,
+	titlenotnumbered,
+	italiano
+]{algorithm2e}
+
 \begin{document}
 	
 	\title{N-bodies simulation\\Assignment programmazione concorrente e distribuita}
@@ -27,12 +34,37 @@
 	\end{itemize}
 	
 	\subsection{Analisi dell'algoritmo}
+	\begin{algorithm}
+		\SetAlgorithmName{Bellman-Ford}{}{}
+		\KwIn{G, w, s}
+		\KwResult{FALSE se il grafo G contiene cicli di costo negativo, TRUE altrimenti}
+		Initialize-Single-Source(G,s)\;
+		\For{i=1 \textbf{to} |G.V| - 1}{
+			\ForEach{edge (u,v) $\in$ G.E}{
+				Relax(u,v,w)\;
+			}
+		}
+		\ForEach{edge (u,v) $\in$ G.E}{
+			\If{v.d > u.d + w(u,v)}{
+				\Return FALSE\;
+			}
+		}
+		\Return TRUE\;
+		\caption{L'algoritmo di Bellman-Ford}
+	\end{algorithm}
+	
 	\subsection{Analisi delle dipendenze tra dati}
+	Questo algoritmo presenta due dipendenze molto importanti:
+	\begin{itemize}
+		\item il risultato di una determinata iterazione $i > 0$ dipende dal risultato dell'iterazione $i-1$
+		\item il risultato dell'aggiornamento dei parametri dei corpi (accelerazione, velocità e posizione) dipende dal risultato del calcolo delle forze
+	\end{itemize}
 	
 	\section{Design}
 	\subsection{Using two barriers}
 	
 	\section{Dettagli implementativi}
+	Per evitare \textit{overhead} non necessari e per semplificare il codice, ogni \texttt{Worker}, prima di cominciare il ciclo vero e proprio, estrae dalla lista dei corpi una lista di puntatori ai corpi su cui deve operare.
 	
 	\section{Valutazione prestazioni}
 	\subsection{Tempi di esecuzione}
