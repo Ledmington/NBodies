@@ -1,10 +1,10 @@
-\documentclass[12pt,a4paper,oneside,draft]{article}
+\documentclass[12pt,a4paper,oneside]{article}
 
 \usepackage[italian]{babel}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage[margin=1in]{geometry}
-\usepackage{tikz}
+\usepackage{graphicx}
 
 \begin{document}
 	
@@ -78,6 +78,22 @@
 
 	\subsection{Speedup}
 	Valori speedup (misurati con 1000 corpi e 10000 step).
+	
+	\begin{figure}[!ht]
+		\centering
+		\includegraphics[width=0.7\linewidth]{speedup-no-gui}
+		\caption{}
+		\label{fig:speedup-no-gui}
+	\end{figure}
+	
+	\begin{figure}[!ht]
+		\centering
+		\includegraphics[width=0.7\linewidth]{speedup-gui}
+		\caption{}
+		\label{fig:speedup-gui}
+	\end{figure}
+	
+
 	\hfill
 	\begin{minipage}{.4\textwidth}
 		Senza GUI
@@ -112,23 +128,22 @@
 			8 & 18,473 \\ \hline
 		\end{tabular}
 	\end{minipage}
-
-	\begin{tikzpicture}[scale=0.8, domain=0:8]
-		\draw[->] (-0.1,0) -- (8.1,0) node[right] {$x$};
-		\draw[->] (0,-0.1) -- (0,8.1) node[above] {$y$};
-		\draw[dotted] (-0.1,-0.1) grid (8.1,8.1);
-		\draw [color=red] (0,0) -- (8,8); % linear speedup
-		\draw (0,0) -- (1,0.9);
-		\draw (1,0.9) -- (2,1.9);
-		\draw (2,1.9) -- (3,2.8);
-		\draw (3,2.8) -- (4,3.5);
-		\draw (4,3.5) -- (5,4.4);
-		\draw (5,4.4) -- (6,5);
-		\draw (6,5) -- (7,5.6);
-		\draw (7,5.6) -- (8,6);
-	\end{tikzpicture}
 	
 	\subsection{Strong scaling efficiency}
+	\begin{figure}[!ht]
+		\centering
+		\includegraphics[width=0.7\linewidth]{sse-no-gui}
+		\caption{}
+		\label{fig:sse-no-gui}
+	\end{figure}
+	
+	\begin{figure}[!ht]
+		\centering
+		\includegraphics[width=0.7\linewidth]{sse-gui}
+		\caption{}
+		\label{fig:sse-gui}
+	\end{figure}
+	
 	\subsection{Profiling}
 	Numero di thread?
 	Utilizzo memoria?

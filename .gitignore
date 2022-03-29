@@ -102,4 +102,5 @@ doc/*
 !doc/*.png
 !doc/*.jpg
 !doc/*.jpeg
+!doc/*.ods
 *.pdf
