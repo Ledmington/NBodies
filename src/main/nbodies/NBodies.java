@@ -34,15 +34,16 @@ public class NBodies {
 		int size = min(width, height) - 100;
 
 		final SimulationData data;
-		data = SimulationDataFactory.testBodySet4_many_bodies();
-		/*data = SimulationData.builder()
-				//.threads(1) // uncomment to use serial
+
+		//data = SimulationDataFactory.testBodySet4_many_bodies();
+		data = SimulationData.builder()
+				.threads(1) // uncomment to use serial
 				.numBodies(1000)
 				.bodies(randomBodyIn(-1, 1, -1, 1))
 				.bounds(new Boundary(-6, -6, 6, 6))
 				.deltaTime(0.01)
 				.steps(10_000)
-				.build();*/
+				.build();
 		//data = SimulationDataFactory.circle(100);
 
 		System.out.println(data);
