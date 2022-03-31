@@ -204,6 +204,30 @@
 	\end{tikzpicture}
 	
 	\subsubsection{Rete di Petri}
+	\begin{tikzpicture}[>=stealth, bend angle=90, auto]
+		
+		\tikzstyle{transition}=[rectangle,thick,draw=black!75,fill=black!20,minimum size=4mm]
+		
+		\node [place, tokens=1] (p1) {};
+		\node [place] (p2) [node distance=1.5cm, below =of p1] {};
+		\node [place] (p3) [node distance=1.5cm, below =of p2] {};
+		\node [place] (p4) [node distance=1.5cm, below =of p3] {};
+		
+		\node [place, tokens=1] (q1) [node distance=3cm, right of=p1] {};
+		\node [place] (q2) [node distance=1.5cm, below =of q1] {};
+		\node [place] (q3) [node distance=1.5cm, below =of q2] {};
+		\node [place] (q4) [node distance=1.5cm, below =of q3] {};
+		
+		\coordinate[node distance=1.5cm, right of=p2] (mid-p2);
+		\coordinate[node distance=1.5cm, right of=p4] (mid-p4);
+		
+		\node [transition] (CF1) [node distance=0.5cm, below =of p1] {CF1} edge [pre] (p1) edge [post] (p2);
+		\node [transition] (CF2) [node distance=0.5cm, below =of q1] {CF2} edge [pre] (q1) edge [post] (q2);
+		\node [transition] (B1) [below =of mid-p2] {B1} edge [pre] (p2) edge [pre] (q2) edge [post] (p3) edge [post] (q3);
+		\node [transition] (UP1) [node distance=0.5cm, below =of p3] {UP1} edge [pre] (p3) edge [post] (p4);
+		\node [transition] (UP2) [node distance=0.5cm, below =of q3] {UP2} edge [pre] (q3) edge [post] (q4);
+		\node [transition] (B2) [below =of mid-p4] {B2} edge [pre] (p4) edge [pre] (q4) edge [post, bend left] (p1) edge [post, bend right] (q1);
+	\end{tikzpicture}
 	
 	\subsection{Prestazioni}
 	\subsubsection{Tempi di esecuzione}
