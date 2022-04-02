@@ -229,6 +229,39 @@
 		\node [transition] (B2) [below =of mid-p4] {B2} edge [pre] (p4) edge [pre] (q4) edge [post, bend left] (p1) edge [post, bend right] (q1);
 	\end{tikzpicture}
 	
+	\subsubsection{Marking graph}
+	Come possiamo notare dal marking graph, la rete di Petri è \textit{bounded}.
+	
+	\begin{tikzpicture}[node distance=1.5cm, >=stealth, bend angle=90, auto]
+		% nodes
+		\node [place] (M1) {M1};
+		\coordinate[left of=M1] (left-M1);
+		\coordinate[right of=M1] (right-M1);
+		\node [place] (M2) [below =of left-M1] {M2};
+		\coordinate[right of=M2] (right-M2);
+		\node [place] (M3) [below =of right-M1] {M3};
+		\node [place] (M4) [below =of right-M2] {M4};
+		\node [place] (M5) [below =of M4] {M5};
+		\coordinate[left of=M5] (left-M5);
+		\coordinate[right of=M5] (right-M5);
+		\node [place] (M6) [below =of left-M5] {M6};
+		\coordinate[right of=M6] (right-M6);
+		\node [place] (M7) [below =of right-M5] {M7};
+		\node [place] (M8) [below =of right-M6] {M8};
+		
+		%arcs
+		\path[->] (M1) edge node {CF1} (M2);
+		\path[->] (M1) edge node {CF2} (M3);
+		\path[->] (M2) edge node {CF2} (M4);
+		\path[->] (M3) edge node {CF1} (M4);
+		\path[->] (M4) edge node {B1} (M5);
+		\path[->] (M5) edge node {UP1} (M6);
+		\path[->] (M5) edge node {UP2} (M7);
+		\path[->] (M6) edge node {UP2} (M8);
+		\path[->] (M7) edge node {UP1} (M8);
+		\path[->] (M8) edge [bend left] node {B2} (M1);
+	\end{tikzpicture}
+	
 	\subsection{Prestazioni}
 	\subsubsection{Tempi di esecuzione}
 	I tempi riportati di seguito fanno riferimento ad un'esecuzione parallela che utilizza 8 thread.
