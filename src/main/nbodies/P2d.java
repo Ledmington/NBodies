@@ -11,6 +11,11 @@ public class P2d {
 		this.y = y;
 	}
 
+	public P2d(final P2d p) {
+		this.x = p.x;
+		this.y = p.y;
+	}
+
 	public void sum(V2d v) {
 		x += v.x;
 		y += v.y;

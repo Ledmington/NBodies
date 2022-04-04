@@ -21,8 +21,7 @@ public class SimulationView {
 			while (true) {
 				display(data);
 				try {
-					// TODO remove comment
-					Thread.sleep(50); // apparently 100 is too much and 50ms is just enough to make things look smooth
+					Thread.sleep(50);
 				} catch (InterruptedException ignored) {
 				}
 			}

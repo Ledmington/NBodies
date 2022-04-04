@@ -9,6 +9,8 @@
  */
 package nbodies;
 
+import java.util.Objects;
+
 /**
  * 2-dimensional vector
  * objects are completely state-less
@@ -76,5 +78,16 @@ public class V2d {
 				"x=" + x +
 				", y=" + y +
 				'}';
+	}
+
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		V2d v2d = (V2d) o;
+		return Double.compare(v2d.x, x) == 0 && Double.compare(v2d.y, y) == 0;
+	}
+
+	public int hashCode() {
+		return Objects.hash(x, y);
 	}
 }

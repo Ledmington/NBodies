@@ -9,6 +9,7 @@ import nbodies.utils.stats.Statistics;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class SimulationData {
 	private final int nThreads;
@@ -17,7 +18,7 @@ public class SimulationData {
 	private final double dt;
 	private final long steps;
 	private final Barrier pause;
-	private final Statistics FPSstats = new Statistics();
+	private final Statistics FPSstats;
 	private double vt = 0;
 	private long iter = 0;
 	private Instant beginning;
@@ -30,7 +31,23 @@ public class SimulationData {
 		this.bounds = bounds;
 		this.dt = dt;
 		this.steps = nsteps;
+		this.FPSstats = new Statistics();
 		pause = new ReusableBarrier(nThreads + 1);
+	}
+
+	public SimulationData(final SimulationData data) {
+		this.nThreads = data.nThreads;
+		this.bodies = new ArrayList<>(data.bodies.stream().map(Body::new).toList());
+		this.bounds = new Boundary(data.bounds);
+		this.dt = data.dt;
+		this.steps = data.steps;
+		this.pause = data.pause; // No need to deep copy the barrier
+		this.vt = data.vt;
+		this.iter = data.iter;
+		this.FPSstats = data.FPSstats;
+		this.beginning = data.beginning;
+		this.lastIteration = data.lastIteration;
+		this.totalTime = data.totalTime;
 	}
 
 	public SimulationData(final ArrayList<Body> bodies, final Boundary bounds) {
@@ -121,5 +138,27 @@ public class SimulationData {
 				"\tx: [" + bounds.getXMin() + ", " + bounds.getXMax() + "]\n" +
 				"\ty: [" + bounds.getYMin() + ", " + bounds.getYMax() + "]\n" +
 				"delta time: " + dt;
+	}
+
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		SimulationData that = (SimulationData) o;
+		if (beginning != null && !beginning.equals(that.beginning)) return false;
+		if (lastIteration != null && !lastIteration.equals(that.lastIteration)) return false;
+		if (totalTime != null && !totalTime.equals(that.totalTime)) return false;
+		return nThreads == that.nThreads &&
+				Double.compare(that.dt, dt) == 0 &&
+				steps == that.steps &&
+				Double.compare(that.vt, vt) == 0 &&
+				iter == that.iter &&
+				bodies.equals(that.bodies) &&
+				bounds.equals(that.bounds) &&
+				pause.equals(that.pause) &&
+				FPSstats.equals(that.FPSstats);
+	}
+
+	public int hashCode() {
+		return Objects.hash(nThreads, bodies, bounds, dt, steps, pause, FPSstats, vt, iter, beginning, lastIteration, totalTime);
 	}
 }

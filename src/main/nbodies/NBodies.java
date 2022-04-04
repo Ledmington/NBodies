@@ -3,7 +3,6 @@ package nbodies;
 import nbodies.sim.MultiThreadSimulator;
 import nbodies.sim.Simulator;
 import nbodies.sim.data.SimulationData;
-import nbodies.sim.data.SimulationDataFactory;
 import nbodies.view.SimulationView;
 
 import java.awt.*;

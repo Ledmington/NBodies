@@ -1,5 +1,7 @@
 package nbodies;
 
+import java.util.Objects;
+
 /*
  * This class represents a body
  *
@@ -19,6 +21,12 @@ public class Body {
 		this.mass = mass;
 	}
 
+	public Body(final Body b) {
+		this.pos = new P2d(b.pos);
+		this.vel = new V2d(b.vel);
+		this.mass = b.mass;
+	}
+
 	public double getMass() {
 		return mass;
 	}
@@ -30,11 +38,6 @@ public class Body {
 	public V2d getVel() {
 		return vel;
 	}
-
-	public boolean equals(Object b) {
-		return this == b;
-	}
-
 
 	/**
 	 * Update the position, according to current velocity
@@ -127,5 +130,18 @@ public class Body {
 				", vel=" + vel +
 				", mass=" + mass +
 				'}';
+	}
+
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Body other = (Body) o;
+		return Double.compare(this.mass, other.mass) == 0 &&
+				this.pos.equals(other.pos) &&
+				this.vel.equals(other.vel);
+	}
+
+	public int hashCode() {
+		return Objects.hash(pos, vel, mass);
 	}
 }
