@@ -1,5 +1,7 @@
 package nbodies.sim;
 
+import nbodies.sim.data.SimulationData;
+
 public interface Simulator {
 	void execute();
 
@@ -8,4 +10,6 @@ public interface Simulator {
 	void stop();
 
 	boolean isRunning();
+
+	SimulationData getData();
 }

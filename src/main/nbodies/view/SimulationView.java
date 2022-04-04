@@ -1,5 +1,6 @@
 package nbodies.view;
 
+import nbodies.NBodies;
 import nbodies.sim.data.SimulationData;
 
 /**
@@ -19,7 +20,7 @@ public class SimulationView {
 
 		Thread displayerThread = new Thread(() -> {
 			while (true) {
-				display(data);
+				display(NBodies.getSimulator().getData());
 				try {
 					Thread.sleep(50);
 				} catch (InterruptedException ignored) {

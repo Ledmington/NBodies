@@ -43,4 +43,8 @@ public abstract class AbstractSimulator implements Simulator {
 
 		return totalForce;
 	}
+
+	public SimulationData getData() {
+		return new SimulationData(data);
+	}
 }
