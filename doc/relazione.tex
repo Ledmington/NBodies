@@ -61,19 +61,19 @@
 	\subsection{Analisi dell'algoritmo}
 	\begin{algorithm}
 		\SetAlgorithmName{Algoritmo}{}{}
-		\KwIn{B, array dei corpi}
-		\KwIn{bounds, i bordi della simulazione}
-		\KwIn{steps, numero di iterazioni da calcolare}
+		\KwIn{\texttt{Bodies}, array dei corpi}
+		\KwIn{\texttt{bounds}, i bordi della simulazione}
+		\KwIn{\texttt{steps}, numero di iterazioni da calcolare}
 		
-		\For{$steps$ times}{
+		\For{\texttt{steps} times}{
 			\ForEach{Body $b$ in $B$}{
-				computeTotalForces($b$)\;
+				\texttt{computeTotalForces($b$)}\;
 			}
 			\ForEach{Body $b$ in $B$}{
-				computeAcceleration($b$)\;
-				updateVelocity($b$)\;
-				updatePosition($b$)\;
-				checkAndSolveBoundaryCollisions($b$)\;
+				\texttt{computeAcceleration($b$)}\;
+				\texttt{updateVelocity($b$)}\;
+				\texttt{updatePosition($b$)}\;
+				\texttt{checkAndSolveBoundaryCollisions($b$)}\;
 			}
 		}
 		\caption{N-Bodies simulation}
@@ -96,23 +96,22 @@
 	
 	\begin{algorithm}
 		\SetAlgorithmName{Algoritmo}{}{}
-		\KwIn{B, array dei corpi}
-		\KwIn{bounds, i bordi della simulazione}
-		\KwIn{steps, numero di iterazioni da calcolare}
+		\KwIn{\texttt{Bodies}, array dei corpi}
+		\KwIn{\texttt{bounds}, i bordi della simulazione}
+		\KwIn{\texttt{steps}, numero di iterazioni da calcolare}
 		
-		partition($B$)\;
-		\For{$steps$ times}{
+		\For{\texttt{steps} times}{
 			\ForEach{Body $b$ in $B$}{
-				computeTotalForces($b$)\;
+				\texttt{computeTotalForces($b$)}\;
 			}
-			barrier()\;
+			\texttt{barrier()}\;
 			\ForEach{Body $b$ in $B$}{
-				computeAcceleration($b$)\;
-				updateVelocity($b$)\;
-				updatePosition($b$)\;
-				checkAndSolveBoundaryCollisions($b$)\;
+				\texttt{computeAcceleration($b$)}\;
+				\texttt{updateVelocity($b$)}\;
+				\texttt{updatePosition($b$)}\;
+				\texttt{checkAndSolveBoundaryCollisions($b$)}\;
 			}
-			barrier()\;
+			\texttt{barrier()}\;
 		}
 		\caption{Parallel N-Bodies simulation}
 		\label{alg:sim-barrier}
@@ -128,7 +127,7 @@
 	\subsection{Correttezza}
 	\hfill
 	\begin{minipage}{.55\textwidth}
-		Per semplificare la modellazione dell'algoritmo e la valutazione della correttezza, lavoreremo su una versione semplificata dell'algoritmo \ref{alg:sim-barrier} qui riportata.
+		Per semplificare la modellazione dell'algoritmo e la valutazione della correttezza, lavoreremo su una versione semplificata dell'algoritmo \ref{alg:sim-barrier} qui riportata. L'istruzione CF rappresenta il calcolo di \texttt{computeTotalForces}, l'istruzione UP rappresenta un raggruppamento delle istruzioni alle righe 7-10 nell'algoritmo \ref{alg:sim-barrier}. Le istruzioni B1 e B2 rappresentano le barriere di sincronizzazione globale rispettivamente alle righe 5 e 12 dell'algoritmo \ref{alg:sim-barrier}.
 	\end{minipage}
 	\hfill
 	\begin{minipage}{.4\textwidth}
@@ -145,6 +144,7 @@
 	\end{minipage}
 	\hfill
 	
+	\iffalse
 	\subsubsection{Diagramma degli stati}
 	\begin{tikzpicture}[node distance=1cm, >=stealth, auto, every place/.style={draw}]
 		% nodes
@@ -205,6 +205,7 @@
 		\path[->] (B2UP) edge node {} (B2B2);
 		\path[->] (UPB2) edge node {} (B2B2);
 	\end{tikzpicture}
+	\fi
 	
 	\subsubsection{Rete di Petri}
 	\scalebox{.8}{%
@@ -214,23 +215,27 @@
 			
 			\node [place, tokens=1] (p1) {};
 			\node [place] (p2) [node distance=1.5cm, below =of p1] {};
-			\node [place] (p3) [node distance=1.5cm, below =of p2] {};
+			\node [place] (p3) [node distance=2cm, below =of p2] {};
 			\node [place] (p4) [node distance=1.5cm, below =of p3] {};
 			
 			\node [place, tokens=1] (q1) [node distance=3cm, right of=p1] {};
 			\node [place] (q2) [node distance=1.5cm, below =of q1] {};
-			\node [place] (q3) [node distance=1.5cm, below =of q2] {};
+			\node [place] (q3) [node distance=2cm, below =of q2] {};
 			\node [place] (q4) [node distance=1.5cm, below =of q3] {};
 			
-			\coordinate[node distance=1.5cm, right of=p2] (mid-p2);
-			\coordinate[node distance=1.5cm, right of=p4] (mid-p4);
+			\node [place, tokens=1] (n1) [node distance=3cm, right of=q1] {};
+			\node [place] (n2) [node distance=1.5cm, below =of n1] {};
+			\node [place] (n3) [node distance=2cm, below =of n2] {};
+			\node [place] (n4) [node distance=1.5cm, below =of n3] {};
 			
 			\node [transition] (CF1) [node distance=0.5cm, below =of p1] {CF1} edge [pre] (p1) edge [post] (p2);
 			\node [transition] (CF2) [node distance=0.5cm, below =of q1] {CF2} edge [pre] (q1) edge [post] (q2);
-			\node [transition] (B1) [below =of mid-p2] {B1} edge [pre] (p2) edge [pre] (q2) edge [post] (p3) edge [post] (q3);
+			\node [transition] (CFN) [node distance=0.5cm, below =of n1] {CF$n$} edge [pre] (n1) edge [post] (n2);
+			\node [transition] (B1) [below =of q2] {B1} edge [pre] (p2) edge [pre] (q2) edge [pre] (n2) edge [post] (p3) edge [post] (q3) edge [post] (n3);
 			\node [transition] (UP1) [node distance=0.5cm, below =of p3] {UP1} edge [pre] (p3) edge [post] (p4);
 			\node [transition] (UP2) [node distance=0.5cm, below =of q3] {UP2} edge [pre] (q3) edge [post] (q4);
-			\node [transition] (B2) [below =of mid-p4] {B2} edge [pre] (p4) edge [pre] (q4) edge [post, bend left] (p1) edge [post, bend right] (q1);
+			\node [transition] (UPN) [node distance=0.5cm, below =of n3] {UP$n$} edge [pre] (n3) edge [post] (n4);
+			\node [transition] (B2) [below =of q4] {B2} edge [pre] (p4) edge [pre] (q4) edge [pre] (n4) edge [post, bend left] (p1) edge [post, bend right=45] (q1) edge [post, bend right] (n1);
 		\end{tikzpicture}
 	}
 	

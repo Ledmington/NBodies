@@ -104,3 +104,5 @@ doc/*
 !doc/*.jpeg
 !doc/*.ods
 *.pdf
+
+nbodies.toolbox/
