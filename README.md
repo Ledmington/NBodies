@@ -3,7 +3,7 @@ First assignment of the "Concurrent and Distributed Programming" course.
 Link to the actual assignment [here](https://docs.google.com/document/d/1B-ml9PS-QT1tR6n2N3txTTiVUJ9IpF49cORrhTrtHAQ/edit).
 
 # How to run JPF
-Remember to use at least 2 threads to run JPF.
+Remember to use at least 2 threads to run JPF. Don't use more than 2 bodies and 2 steps.
 
 Run the JPF container from the root directory of the project.
 ```

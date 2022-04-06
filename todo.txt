@@ -1,9 +1,0 @@
-Synchronize the GUI (reinsert the "display" method)
-
-Measure performance
-
-fix deadlock when clicking start right after stop
-
-add force constants (and random seed) to SimulationData and initial print
-
-add final report with some statistics

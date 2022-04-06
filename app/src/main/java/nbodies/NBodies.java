@@ -32,11 +32,11 @@ public class NBodies {
 		//data = SimulationDataFactory.testBodySet4_many_bodies();
 		data = SimulationData.builder()
 				.threads(2) // uncomment to use serial
-				.numBodies(100)
+				.numBodies(2)
 				.bodies(randomBodyIn(-1, 1, -1, 1))
 				.bounds(new Boundary(-6, -6, 6, 6))
 				.deltaTime(0.01)
-				.steps(1_000)
+				.steps(2)
 				.build();
 		//data = SimulationDataFactory.circle(100);
 
@@ -66,7 +66,10 @@ public class NBodies {
 			}
 		}
 
-		final double seconds = (double) (data.getTotalTime().toMillis()) / 1000;
+		double seconds = 0;
+		if (data.getTotalTime() != null) {
+			seconds = (double) (data.getTotalTime().toMillis()) / 1000;
+		}
 		System.out.println("\nTotal time of execution: " + seconds + " seconds");
 	}
 

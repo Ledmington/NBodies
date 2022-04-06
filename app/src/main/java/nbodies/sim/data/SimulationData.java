@@ -17,11 +17,10 @@ public class SimulationData {
 	private final ArrayList<Body> bodies;
 	private final Boundary bounds;
 	private final double dt;
-	private final long steps;
+	private final Iteration iteration;
 	private final Barrier pause;
 	private final Statistics FPSstats;
 	private double vt = 0;
-	private long iter = 0;
 	private Instant beginning;
 	private Instant lastIteration = null;
 	private Duration totalTime = null;
@@ -31,7 +30,7 @@ public class SimulationData {
 		this.bodies = bodies;
 		this.bounds = bounds;
 		this.dt = dt;
-		this.steps = nsteps;
+		this.iteration = new Iteration(nsteps);
 		this.FPSstats = new Statistics();
 		pause = new ReusableBarrier(nThreads + 1);
 	}
@@ -41,10 +40,9 @@ public class SimulationData {
 		this.bodies = data.bodies.stream().map(Body::new).collect(Collectors.toCollection(ArrayList::new));
 		this.bounds = new Boundary(data.bounds);
 		this.dt = data.dt;
-		this.steps = data.steps;
+		this.iteration = new Iteration(data.iteration);
 		this.pause = data.pause; // No need to deep copy the barrier
 		this.vt = data.vt;
-		this.iter = data.iter;
 		this.FPSstats = data.FPSstats;
 		this.beginning = data.beginning;
 		this.lastIteration = data.lastIteration;
@@ -63,7 +61,7 @@ public class SimulationData {
 		if (isFinished()) return;
 
 		vt += dt;
-		iter++;
+		iteration.inc();
 
 		if (lastIteration == null) {
 			beginning = Instant.now();
@@ -97,7 +95,7 @@ public class SimulationData {
 	}
 
 	public long getIteration() {
-		return iter;
+		return iteration.getIteration();
 	}
 
 	public int getNThreads() {
@@ -109,7 +107,7 @@ public class SimulationData {
 	}
 
 	public boolean isFinished() {
-		return iter >= steps;
+		return iteration.isFinished();
 	}
 
 	public Statistics getFPSStats() {
@@ -119,8 +117,8 @@ public class SimulationData {
 	public String getETA() {
 		if (beginning == null) return "";
 		Duration elapsed = Duration.between(beginning, Instant.now());
-		double msForEachIteration = (double) elapsed.toMillis() / (double) iter;
-		long remainingMillis = (long) (msForEachIteration * (steps - iter));
+		double msForEachIteration = (double) elapsed.toMillis() / (double) getIteration();
+		long remainingMillis = (long) (msForEachIteration * (iteration.getSteps() - iteration.getIteration()));
 		long minutes = remainingMillis / 60_000;
 		remainingMillis %= 60_000;
 		long seconds = remainingMillis / 1000;
@@ -134,7 +132,7 @@ public class SimulationData {
 
 	public String toString() {
 		return "Simulating " + bodies.size() + " bodies\n" +
-				"Steps: " + steps + "\n" +
+				"Steps: " + iteration.getSteps() + "\n" +
 				"Boundaries:\n" +
 				"\tx: [" + bounds.getXMin() + ", " + bounds.getXMax() + "]\n" +
 				"\ty: [" + bounds.getYMin() + ", " + bounds.getYMax() + "]\n" +
@@ -150,9 +148,8 @@ public class SimulationData {
 		if (totalTime != null && !totalTime.equals(that.totalTime)) return false;
 		return nThreads == that.nThreads &&
 				Double.compare(that.dt, dt) == 0 &&
-				steps == that.steps &&
 				Double.compare(that.vt, vt) == 0 &&
-				iter == that.iter &&
+				iteration.equals(that.iteration) &&
 				bodies.equals(that.bodies) &&
 				bounds.equals(that.bounds) &&
 				pause.equals(that.pause) &&
@@ -160,6 +157,6 @@ public class SimulationData {
 	}
 
 	public int hashCode() {
-		return Objects.hash(nThreads, bodies, bounds, dt, steps, pause, FPSstats, vt, iter, beginning, lastIteration, totalTime);
+		return Objects.hash(nThreads, bodies, bounds, dt, iteration, pause, FPSstats, vt, beginning, lastIteration, totalTime);
 	}
 }
