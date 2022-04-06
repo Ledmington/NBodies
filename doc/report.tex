@@ -52,13 +52,19 @@
 	\subsection{Descrizione della simulazione}
 	Questa simulazione è una variante della nota "simulazione di $N$ corpi". La simulazione è composta da:
 	\begin{itemize}
-		\item un numero $N$ di corpi ciascuno dotato di massa ma incorporeo (non ha una dimensione)
+		\item un numero $N$ di corpi ciascuno dotato di massa ma incorporeo: i corpi non possono colpire nulla tranne i limiti della simulazione
 		\item un dominio bidimensionale finito di forma rettangolare e allineato con gli assi cartesiani
-		\item una forza repulsiva tra i corpi (descritta in dettaglio di seguito)
-		\item una forza d'attrito applicata sui singoli corpi
+		\item una forza repulsiva tra i corpi pari a $F_{ij}=K_{rep}\cdot\dfrac{m_i}{d_{ij}^2}$
+		\item una forza d'attrito applicata sui singoli corpi pari a $FR_i=-K_{fri}\cdot{v_i}$
 	\end{itemize}
 	
 	\subsection{Analisi dell'algoritmo}
+	L'algoritmo seriale è piuttosto semplice. Il corpo di ogni iterazione della simulazione è diviso in due parti:
+	\begin{enumerate}
+		\item Il calcolo di tutte le forze repulsive (ciclo alle righe 2-4)
+		\item L'aggiornamento dei parametri di ogni copro, in base alle forze calcolate nel primo loop (ciclo alle righe 5-10)
+	\end{enumerate}
+	Il costo computazionale è $O(b^2\cdot k)$, in cui $b$ rappresenta il numero di corpi e $k$ il numero di iterazioni da compiere.
 	\begin{algorithm}
 		\SetAlgorithmName{Algoritmo}{}{}
 		\KwIn{\texttt{Bodies}, array dei corpi}
@@ -83,33 +89,59 @@
 	\label{sec:dipendenze}
 	Questo algoritmo presenta due dipendenze molto importanti:
 	\begin{itemize}
-		\item il risultato di una determinata iterazione $i > 0$ dipende dal risultato dell'iterazione $i-1$
+		\item il risultato di una determinata iterazione di indice $i > 0$ dipende dal risultato dell'iterazione di indice $i-1$
 		\item il risultato dell'aggiornamento dei parametri di un qualsiasi corpo $b_i$ (accelerazione, velocità e posizione) dipende dal risultato del calcolo di tutte le forze repulsive agenti su $b_i$
 	\end{itemize}
 	
 	\section{Design}
 	\subsection{Mutua esclusione}
-	Come emerso dall'analisi dell'algoritmo, non è necessario l'utilizzo di alcun meccanismo di mutua esclusione per evitare letture e scritture concorrenti sui dai dei singoli corpi. Difatti, è sufficiente \textbf{partizionare} l'array globale dei corpi in tante porzioni quanti sono i thread utilizzati, ognuno dei quali si occuperà di aggiornare solamente i corpi della propria partizione.
-	
-	\subsection{Sincronizzazione}
-	Un problema più importante consiste, invece, nella \textbf{sincronizzazione} dei thread al fine di non violare nessuna delle due dipendenze tra dati individuate. Per fare ciò utilizziamo due Barrier, ovvero dei costrutti che permettono la sincronizzazione globale dei thread, come riportato nello pseudocodice di seguito. Le Barrier utilizzate sono implementate nella classe \texttt{nbodies.utils.barrier.ReusableBarrier}.
+	Come emerso dall'analisi dell'algoritmo, non è necessario l'utilizzo di alcun meccanismo di mutua esclusione per evitare letture e scritture concorrenti sui parametri dei singoli corpi. Difatti, è sufficiente \textbf{partizionare} l'array globale dei corpi in tante porzioni quanti sono i thread utilizzati, ognuno dei quali si occuperà di aggiornare solamente i corpi della propria partizione.
 	
 	\begin{algorithm}
 		\SetAlgorithmName{Algoritmo}{}{}
 		\KwIn{\texttt{Bodies}, array dei corpi}
 		\KwIn{\texttt{bounds}, i bordi della simulazione}
 		\KwIn{\texttt{steps}, numero di iterazioni da calcolare}
+		\KwIn{\texttt{nth}, numero di thread utilizzati}
+		\KwIn{\texttt{tid}, indice del thread in esecuzione}
 		
+		start = length(\texttt{Bodies}) * \texttt{tid} / \texttt{nth}\;
+		end = length(\texttt{Bodies}) * (\texttt{tid} + 1) / \texttt{nth}\;
 		\For{\texttt{steps} times}{
-			\ForEach{Body $b$ in $B$}{
-				\texttt{computeTotalForces($b$)}\;
+			\For{i=start; i<end; i++}{
+				\texttt{computeTotalForces(\texttt{Bodies[i]})}\;
+			}
+			\For{i=start; i<end; i++}{
+				\texttt{computeAcceleration(\texttt{Bodies[i]})}\;
+				\texttt{updateVelocity(\texttt{Bodies[i]})}\;
+				\texttt{updatePosition(\texttt{Bodies[i]})}\;
+				\texttt{checkAndSolveBoundaryCollisions(\texttt{Bodies[i]})}\;
+			}
+		}
+		\caption{Partitioning N-Bodies simulation}
+		\label{alg:sim-partition}
+	\end{algorithm}
+	
+	\subsection{Sincronizzazione}
+	Un problema più importante consiste, invece, nella \textbf{sincronizzazione} dei thread al fine di non violare nessuna delle due dipendenze tra dati individuate. Per fare ciò utilizziamo due Barrier, ovvero dei costrutti che permettono la sincronizzazione globale dei thread, come riportato nello pseudocodice di seguito. Le Barrier utilizzate sono implementate nella classe \texttt{nbodies.utils.barrier.ReusableBarrier}.
+	
+	\begin{algorithm}
+		\SetAlgorithmName{Algoritmo}{}{}
+		\KwIn{\texttt{nth}, numero di thread utilizzati}
+		\KwIn{\texttt{tid}, indice del thread in esecuzione}
+		
+		start = length(\texttt{Bodies}) * \texttt{tid} / \texttt{nth}\;
+		end = length(\texttt{Bodies}) * (\texttt{tid} + 1) / \texttt{nth}\;
+		\For{\texttt{steps} times}{
+			\For{i=start; i<end; i++}{
+				\texttt{computeTotalForces(\texttt{Bodies[i]})}\;
 			}
 			\texttt{barrier()}\;
-			\ForEach{Body $b$ in $B$}{
-				\texttt{computeAcceleration($b$)}\;
-				\texttt{updateVelocity($b$)}\;
-				\texttt{updatePosition($b$)}\;
-				\texttt{checkAndSolveBoundaryCollisions($b$)}\;
+			\For{i=start; i<end; i++}{
+				\texttt{computeAcceleration(\texttt{Bodies[i]})}\;
+				\texttt{updateVelocity(\texttt{Bodies[i]})}\;
+				\texttt{updatePosition(\texttt{Bodies[i]})}\;
+				\texttt{checkAndSolveBoundaryCollisions(\texttt{Bodies[i]})}\;
 			}
 			\texttt{barrier()}\;
 		}
@@ -120,29 +152,29 @@
 	\subsection{GUI}
 	Per evitare un eccessivo overhead della GUI, ho scelto di renderla completamente asincrona rispetto alla simulazione.
 	
-	\section{Dettagli implementativi}
-	Per evitare \textit{overhead} non necessari e per semplificare il codice, ogni \texttt{Worker}, prima di cominciare il ciclo vero e proprio, estrae dalla lista dei corpi una lista di puntatori ai corpi su cui deve operare.
-	
 	\section{Valutazione}
 	\subsection{Correttezza}
 	\hfill
 	\begin{minipage}{.55\textwidth}
-		Per semplificare la modellazione dell'algoritmo e la valutazione della correttezza, lavoreremo su una versione semplificata dell'algoritmo \ref{alg:sim-barrier} qui riportata. L'istruzione CF rappresenta il calcolo di \texttt{computeTotalForces}, l'istruzione UP rappresenta un raggruppamento delle istruzioni alle righe 7-10 nell'algoritmo \ref{alg:sim-barrier}. Le istruzioni B1 e B2 rappresentano le barriere di sincronizzazione globale rispettivamente alle righe 5 e 12 dell'algoritmo \ref{alg:sim-barrier}.
+		Per semplificare la modellazione dell'algoritmo e la valutazione della correttezza, lavoreremo su una versione semplificata dell'algoritmo \ref{alg:sim-barrier} qui riportata. L'istruzione CF rappresenta il calcolo di \texttt{computeTotalForces}, l'istruzione UP rappresenta un raggruppamento delle istruzioni alle righe 9-12 nell'algoritmo \ref{alg:sim-barrier}. Le istruzioni B1 e B2 rappresentano le barriere di sincronizzazione globale rispettivamente alle righe 7 e 14 dell'algoritmo \ref{alg:sim-barrier}.
 	\end{minipage}
 	\hfill
 	\begin{minipage}{.4\textwidth}
 		\begin{algorithm}[H]
 			\SetAlgorithmName{Algoritmo}{}{}
 			\Loop{}{
-				CF\\
+				ComputeForces\\
 				B1\\
-				UP\\
+				UpdateParameters\\
 				B2
 			}
 			\caption{Simplified N-Bodies simulation}
 		\end{algorithm}
 	\end{minipage}
 	\hfill
+	
+	\subsubsection{Java Path Finder}
+	Un'analisi, mediante JPF, sul codice realizzato ha rilevato alcune race condition all'interno della classe \texttt{nbodies.sim.data.SimulationData}. In particolare, tali race condition riguardavano il numero dell'iterazione corrente e il tempo di esecuzione misurato, entrambe risolte mediante l'estrazione dei monitor \texttt{Timer} e \texttt{Iteration} all'interno dello stesso package. Infine, JPF non ha rilevato situazioni di \textit{deadlock}.
 	
 	\iffalse
 	\subsubsection{Diagramma degli stati}
@@ -208,75 +240,79 @@
 	\fi
 	
 	\subsubsection{Rete di Petri}
-	\scalebox{.8}{%
-		\begin{tikzpicture}[>=stealth, bend angle=90, auto]
-			
-			\tikzstyle{transition}=[rectangle,thick,draw=black!75,fill=black!20,minimum size=4mm]
-			
-			\node [place, tokens=1] (p1) {};
-			\node [place] (p2) [node distance=1.5cm, below =of p1] {};
-			\node [place] (p3) [node distance=2cm, below =of p2] {};
-			\node [place] (p4) [node distance=1.5cm, below =of p3] {};
-			
-			\node [place, tokens=1] (q1) [node distance=3cm, right of=p1] {};
-			\node [place] (q2) [node distance=1.5cm, below =of q1] {};
-			\node [place] (q3) [node distance=2cm, below =of q2] {};
-			\node [place] (q4) [node distance=1.5cm, below =of q3] {};
-			
-			\node [place, tokens=1] (n1) [node distance=3cm, right of=q1] {};
-			\node [place] (n2) [node distance=1.5cm, below =of n1] {};
-			\node [place] (n3) [node distance=2cm, below =of n2] {};
-			\node [place] (n4) [node distance=1.5cm, below =of n3] {};
-			
-			\node [transition] (CF1) [node distance=0.5cm, below =of p1] {CF1} edge [pre] (p1) edge [post] (p2);
-			\node [transition] (CF2) [node distance=0.5cm, below =of q1] {CF2} edge [pre] (q1) edge [post] (q2);
-			\node [transition] (CFN) [node distance=0.5cm, below =of n1] {CF$n$} edge [pre] (n1) edge [post] (n2);
-			\node [transition] (B1) [below =of q2] {B1} edge [pre] (p2) edge [pre] (q2) edge [pre] (n2) edge [post] (p3) edge [post] (q3) edge [post] (n3);
-			\node [transition] (UP1) [node distance=0.5cm, below =of p3] {UP1} edge [pre] (p3) edge [post] (p4);
-			\node [transition] (UP2) [node distance=0.5cm, below =of q3] {UP2} edge [pre] (q3) edge [post] (q4);
-			\node [transition] (UPN) [node distance=0.5cm, below =of n3] {UP$n$} edge [pre] (n3) edge [post] (n4);
-			\node [transition] (B2) [below =of q4] {B2} edge [pre] (p4) edge [pre] (q4) edge [pre] (n4) edge [post, bend left] (p1) edge [post, bend right=45] (q1) edge [post, bend right] (n1);
-		\end{tikzpicture}
-	}
-	
-	\subsubsection{Marking graph}
-	Come possiamo notare dal marking graph, la rete di Petri è \textit{bounded}. Le proprietà LTL che si possono esprimere su di esso corrispondo alle due dipendenze tra dati evidenziate nella sezione \ref{sec:dipendenze}. Formalmente:
+	Riporto qui sotto la rete di Petri corrispondente
+	Come possiamo notare dal marking graph, la rete di Petri è \textit{bounded}. Le proprietà LTL che si possono esprimere su di esso corrispondono alle due dipendenze tra dati evidenziate nella sezione \ref{sec:dipendenze}. Formalmente:
 	\begin{itemize}
 		\item $\square ((CF1 \vee CF2) \implies \lozenge B1)$
 		\item $\square ((UP1 \vee UP2) \implies \lozenge B2)$
 	\end{itemize}
-	
-	\scalebox{.7}{
-		\begin{tikzpicture}[node distance=1.5cm, >=stealth, bend angle=90, auto]
-			% nodes
-			\node [place] (M1) {M1};
-			\coordinate[left of=M1] (left-M1);
-			\coordinate[right of=M1] (right-M1);
-			\node [place] (M2) [below =of left-M1] {M2};
-			\coordinate[right of=M2] (right-M2);
-			\node [place] (M3) [below =of right-M1] {M3};
-			\node [place] (M4) [below =of right-M2] {M4};
-			\node [place] (M5) [below =of M4] {M5};
-			\coordinate[left of=M5] (left-M5);
-			\coordinate[right of=M5] (right-M5);
-			\node [place] (M6) [below =of left-M5] {M6};
-			\coordinate[right of=M6] (right-M6);
-			\node [place] (M7) [below =of right-M5] {M7};
-			\node [place] (M8) [below =of right-M6] {M8};
-			
-			%arcs
-			\path[->] (M1) edge node {CF1} (M2);
-			\path[->] (M1) edge node {CF2} (M3);
-			\path[->] (M2) edge node {CF2} (M4);
-			\path[->] (M3) edge node {CF1} (M4);
-			\path[->] (M4) edge node {B1} (M5);
-			\path[->] (M5) edge node {UP1} (M6);
-			\path[->] (M5) edge node {UP2} (M7);
-			\path[->] (M6) edge node {UP2} (M8);
-			\path[->] (M7) edge node {UP1} (M8);
-			\path[->] (M8) edge [bend left] node {B2} (M1);
-		\end{tikzpicture}
-	}
+
+	\begin{center}
+		\begin{minipage}{.45\textwidth}
+		\scalebox{.7}{
+			\begin{tikzpicture}[>=stealth, bend angle=90, auto]
+				
+				\tikzstyle{transition}=[rectangle,thick,draw=black!75,fill=black!20,minimum size=4mm]
+				
+				\node [place, tokens=1] (p1) {};
+				\node [place] (p2) [node distance=1.5cm, below =of p1] {};
+				\node [place] (p3) [node distance=2cm, below =of p2] {};
+				\node [place] (p4) [node distance=1.5cm, below =of p3] {};
+				
+				\node [place, tokens=1] (q1) [node distance=3cm, right of=p1] {};
+				\node [place] (q2) [node distance=1.5cm, below =of q1] {};
+				\node [place] (q3) [node distance=2cm, below =of q2] {};
+				\node [place] (q4) [node distance=1.5cm, below =of q3] {};
+				
+				\node [place, tokens=1] (n1) [node distance=3cm, right of=q1] {};
+				\node [place] (n2) [node distance=1.5cm, below =of n1] {};
+				\node [place] (n3) [node distance=2cm, below =of n2] {};
+				\node [place] (n4) [node distance=1.5cm, below =of n3] {};
+				
+				\node [transition] (CF1) [node distance=0.5cm, below =of p1] {CF1} edge [pre] (p1) edge [post] (p2);
+				\node [transition] (CF2) [node distance=0.5cm, below =of q1] {CF2} edge [pre] (q1) edge [post] (q2);
+				\node [transition] (CFN) [node distance=0.5cm, below =of n1] {CF$n$} edge [pre] (n1) edge [post] (n2);
+				\node [transition] (B1) [below =of q2] {B1} edge [pre] (p2) edge [pre] (q2) edge [pre] (n2) edge [post] (p3) edge [post] (q3) edge [post] (n3);
+				\node [transition] (UP1) [node distance=0.5cm, below =of p3] {UP1} edge [pre] (p3) edge [post] (p4);
+				\node [transition] (UP2) [node distance=0.5cm, below =of q3] {UP2} edge [pre] (q3) edge [post] (q4);
+				\node [transition] (UPN) [node distance=0.5cm, below =of n3] {UP$n$} edge [pre] (n3) edge [post] (n4);
+				\node [transition] (B2) [below =of q4] {B2} edge [pre] (p4) edge [pre] (q4) edge [pre] (n4) edge [post, bend left] (p1) edge [post, bend right=45] (q1) edge [post, bend right] (n1);
+			\end{tikzpicture}}
+		\end{minipage}
+			\hfill
+		\begin{minipage}{.45\textwidth}
+			\scalebox{0.7}{
+			\begin{tikzpicture}[node distance=1.5cm, >=stealth, bend angle=90, auto]
+				% nodes
+				\node [place] (M1) {M1};
+				\coordinate[left of=M1] (left-M1);
+				\coordinate[right of=M1] (right-M1);
+				\node [place] (M2) [below =of left-M1] {M2};
+				\coordinate[right of=M2] (right-M2);
+				\node [place] (M3) [below =of right-M1] {M3};
+				\node [place] (M4) [below =of right-M2] {M4};
+				\node [place] (M5) [below =of M4] {M5};
+				\coordinate[left of=M5] (left-M5);
+				\coordinate[right of=M5] (right-M5);
+				\node [place] (M6) [below =of left-M5] {M6};
+				\coordinate[right of=M6] (right-M6);
+				\node [place] (M7) [below =of right-M5] {M7};
+				\node [place] (M8) [below =of right-M6] {M8};
+				
+				%arcs
+				\path[->] (M1) edge node {CF1} (M2);
+				\path[->] (M1) edge node {CF2} (M3);
+				\path[->] (M2) edge node {CF2} (M4);
+				\path[->] (M3) edge node {CF1} (M4);
+				\path[->] (M4) edge node {B1} (M5);
+				\path[->] (M5) edge node {UP1} (M6);
+				\path[->] (M5) edge node {UP2} (M7);
+				\path[->] (M6) edge node {UP2} (M8);
+				\path[->] (M7) edge node {UP1} (M8);
+				\path[->] (M8) edge [bend left] node {B2} (M1);
+			\end{tikzpicture}}
+		\end{minipage}
+	\end{center}
 	
 	\subsection{Prestazioni}
 	\subsubsection{Tempi di esecuzione}
@@ -320,8 +356,10 @@
 	\end{minipage}
 	\hfill
 
-	\subsubsection{Speedup}
-	Valori speedup (misurati con 1000 corpi e 10000 step).
+	\subsubsection{Speedup e Strong scaling efficiency}
+	I valori di speedup ed efficienza riportati di seguito sono stati misurati con 1000 corpi e 10000 step. In tutti i grafici, è molto evidente lo scalino dovuto all'HyperThreading dei processori Intel utilizzati per le misurazioni. Questi processori, infatti, possiedono 4 core fisici che la tecnologia dell'HyperThreading virtualizza in 8 core logici. Dunque, nel passaggio da 4 a 5 thread si riscontra un significativo peggioramento delle prestazioni dovuto all'overhead per i continui \textit{context switch} del thread "in eccesso".
+	
+	Altro fenomeno degno di nota è lo speedup superlineare misurato nella versione con GUI. Ritengo che ciò sia dovuto ad un elevato overhead per sincronizzazione e mutua esclusione nella versione seriale che la rende molto più lenta rispetto alle versioni parallele.
 	
 	\hfill
 	\begin{minipage}{.45\textwidth}
@@ -337,7 +375,6 @@
 	\end{minipage}
 	\hfill
 	
-	\subsubsection{Strong scaling efficiency}
 	\hfill
 	\begin{minipage}{.45\textwidth}
 		\centering

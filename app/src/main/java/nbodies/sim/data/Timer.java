@@ -37,6 +37,9 @@ public class Timer {
     }
 
     public synchronized Duration elapsed() {
+        if (beginning == null) {
+            return Duration.ZERO;
+        }
         return Duration.between(beginning, Instant.now());
     }
 

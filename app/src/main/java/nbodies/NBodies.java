@@ -31,12 +31,12 @@ public class NBodies {
 
 		//data = SimulationDataFactory.testBodySet4_many_bodies();
 		data = SimulationData.builder()
-				.threads(2) // uncomment to use serial
-				.numBodies(2)
+				//.threads(1) // uncomment to use serial
+				.numBodies(1000)
 				.bodies(randomBodyIn(-1, 1, -1, 1))
 				.bounds(new Boundary(-6, -6, 6, 6))
 				.deltaTime(0.01)
-				.steps(2)
+				.steps(100_000)
 				.build();
 		//data = SimulationDataFactory.circle(100);
 
