@@ -8,6 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -107,7 +108,7 @@ public class TestBody {
 					);
 				})
 				.filter(b -> !inside(b))
-				.toList();
+				.collect(Collectors.toList());
 
 		for (Body b : corners) {
 			assertFalse(inside(b)); // double check that they are inside

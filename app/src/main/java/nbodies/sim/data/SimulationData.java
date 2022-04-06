@@ -10,6 +10,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class SimulationData {
 	private final int nThreads;
@@ -37,7 +38,7 @@ public class SimulationData {
 
 	public SimulationData(final SimulationData data) {
 		this.nThreads = data.nThreads;
-		this.bodies = new ArrayList<>(data.bodies.stream().map(Body::new).toList());
+		this.bodies = data.bodies.stream().map(Body::new).collect(Collectors.toCollection(ArrayList::new));
 		this.bounds = new Boundary(data.bounds);
 		this.dt = data.dt;
 		this.steps = data.steps;
