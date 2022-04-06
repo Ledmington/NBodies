@@ -1,6 +1,6 @@
-target = app/src/main/java/nbodies/NBodies
+target=nbodies.NBodies
 
-classpath=./build/classes/java/main
+classpath=./app/build/classes/java/main
 
 listener=gov.nasa.jpf.listener.PreciseRaceDetector
 

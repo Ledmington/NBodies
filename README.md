@@ -5,7 +5,7 @@ Link to the actual assignment [here](https://docs.google.com/document/d/1B-ml9PS
 # How to run JPF
 Run the JPF container from the root directory of the project.
 ```
-docker run -v PercorsoAllacartellaDelProgetto:/home -it gianlucaaguzzi/pcd-jpf:latest /bin/bash
+docker run -v $PWD:/home -it gianlucaaguzzi/pcd-jpf:latest /bin/bash
 ```
 
 Build the project and run JPF.
