@@ -7,6 +7,7 @@ import nbodies.utils.barrier.Barrier;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.locks.Lock;
 import java.util.function.Function;
 
 public class Worker extends Thread {
@@ -17,9 +18,11 @@ public class Worker extends Thread {
 	private final Barrier endIteration;
 	private final Function<Body, V2d> totalForceComputer;
 	private boolean paused = false;
+	private final Lock mutex;
 
-	public Worker(final int id, final SimulationData data, final Barrier endCompute, final Barrier endIteration, final Function<Body, V2d> totalForceComputer) {
+	public Worker(final int id, final Lock mutex, final SimulationData data, final Barrier endCompute, final Barrier endIteration, final Function<Body, V2d> totalForceComputer) {
 		this.id = id;
+		this.mutex = mutex;
 		this.data = data;
 		this.endCompute = endCompute;
 		this.endIteration = endIteration;
@@ -27,6 +30,11 @@ public class Worker extends Thread {
 	}
 
 	public void run() {
+		// The master thread locks the mutex
+		if(id == 0) {
+			mutex.lock();
+		}
+
 		final ArrayList<Body> bodies = data.getBodies();
 
 		// partition indices
@@ -60,6 +68,8 @@ public class Worker extends Thread {
 
 			if (id == 0) {
 				data.nextIteration();
+				mutex.unlock();
+				mutex.lock();
 			}
 			endIteration.hitAndWaitAll();
 		}

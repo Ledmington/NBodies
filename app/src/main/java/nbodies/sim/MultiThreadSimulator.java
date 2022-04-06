@@ -23,7 +23,7 @@ public class MultiThreadSimulator extends AbstractSimulator {
 		running = true;
 		workers = new ArrayList<>();
 		for (int i = 0; i < data.getNThreads(); i++) {
-			Worker w = new Worker(i, data, endCompute, endIteration, this::computeTotalForceOnBody);
+			Worker w = new Worker(i, this.mutex, data, endCompute, endIteration, this::computeTotalForceOnBody);
 			workers.add(w);
 			w.start();
 		}

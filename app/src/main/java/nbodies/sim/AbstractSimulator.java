@@ -6,11 +6,14 @@ import nbodies.V2d;
 import nbodies.sim.data.SimulationData;
 
 import java.util.ArrayList;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public abstract class AbstractSimulator implements Simulator {
 
 	protected final SimulationData data;
 	protected boolean running = false;
+	protected final Lock mutex = new ReentrantLock();
 
 	protected AbstractSimulator(final SimulationData data) {
 		this.data = data;
@@ -45,6 +48,10 @@ public abstract class AbstractSimulator implements Simulator {
 	}
 
 	public SimulationData getData() {
-		return new SimulationData(data);
+		final SimulationData dataCopy;
+		mutex.lock();
+		dataCopy = new SimulationData(data);
+		mutex.unlock();
+		return dataCopy;
 	}
 }
