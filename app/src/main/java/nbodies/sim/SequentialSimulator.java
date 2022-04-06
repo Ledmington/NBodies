@@ -12,8 +12,6 @@ public class SequentialSimulator extends AbstractSimulator {
 
 	public void execute() {
 		while (!data.isFinished()) {
-			//System.out.println(iter + " out of " + nSteps); // TODO remove if not needed
-
 			/* update bodies velocity */
 			for (Body b : getBodies()) {
 				/* compute total force on bodies */
@@ -40,15 +38,11 @@ public class SequentialSimulator extends AbstractSimulator {
 		}
 	}
 
-	public void start() {
-		// TODO
-	}
+	public void start() {}
 
-	public void stop() {
-		// TODO
-	}
+	public void stop() {}
 
 	public boolean isRunning() {
-		return false; // TODO
+		return !data.isFinished();
 	}
 }

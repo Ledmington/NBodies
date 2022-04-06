@@ -22,8 +22,6 @@ public class ExecutorSimulator extends AbstractSimulator {
 		final Map<Body, V2d> totalForces = new HashMap<>();
 
 		while (!data.isFinished()) {
-			//System.out.println(iter + " out of " + nSteps); // TODO remove if not needed
-
 			for (Body b : getBodies()) {
 				Future<V2d> task = executor.submit(() -> computeTotalForceOnBody(b));
 				waitingTasks.put(b, task);
@@ -60,12 +58,9 @@ public class ExecutorSimulator extends AbstractSimulator {
 		}
 	}
 
-	public void start() {
-		// TODO
-	}
+	public void start() {}
 
 	public void stop() {
-		// TODO fix
 		executor.shutdown();
 		try {
 			boolean b = executor.awaitTermination(1000_000_000, TimeUnit.SECONDS);
@@ -74,6 +69,6 @@ public class ExecutorSimulator extends AbstractSimulator {
 	}
 
 	public boolean isRunning() {
-		return false; // TODO
+		return !executor.isTerminated();
 	}
 }

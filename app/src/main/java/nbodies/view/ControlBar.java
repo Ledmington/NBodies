@@ -43,7 +43,6 @@ public class ControlBar extends JPanel {
 	}
 
 	private void checkAndUpdateStatus() {
-		// TODO avoid this null check
 		if (NBodies.getSimulator() == null) return;
 
 		if (NBodies.getSimulator().isRunning()) {
