@@ -7,7 +7,6 @@ import nbodies.utils.barrier.ReusableBarrier;
 import nbodies.utils.stats.Statistics;
 
 import java.time.Duration;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -21,9 +20,7 @@ public class SimulationData {
 	private final Barrier pause;
 	private final Statistics FPSstats;
 	private double vt = 0;
-	private Instant beginning;
-	private Instant lastIteration = null;
-	private Duration totalTime = null;
+	private final Timer timer;
 
 	public SimulationData(final ArrayList<Body> bodies, final Boundary bounds, final double dt, final long nsteps, final int nThreads) {
 		this.nThreads = nThreads;
@@ -33,6 +30,7 @@ public class SimulationData {
 		this.iteration = new Iteration(nsteps);
 		this.FPSstats = new Statistics();
 		pause = new ReusableBarrier(nThreads + 1);
+		this.timer = new Timer();
 	}
 
 	public SimulationData(final SimulationData data) {
@@ -44,9 +42,7 @@ public class SimulationData {
 		this.pause = data.pause; // No need to deep copy the barrier
 		this.vt = data.vt;
 		this.FPSstats = data.FPSstats;
-		this.beginning = data.beginning;
-		this.lastIteration = data.lastIteration;
-		this.totalTime = data.totalTime;
+		this.timer = new Timer(data.timer);
 	}
 
 	public SimulationData(final ArrayList<Body> bodies, final Boundary bounds) {
@@ -63,18 +59,14 @@ public class SimulationData {
 		vt += dt;
 		iteration.inc();
 
-		if (lastIteration == null) {
-			beginning = Instant.now();
-			lastIteration = Instant.now();
+		if (!timer.isStarted()) {
+			timer.start();
 		} else {
-			Instant newIteration = Instant.now();
-			Duration timeElapsed = Duration.between(lastIteration, newIteration);
-			lastIteration = newIteration;
-			FPSstats.add((double) (timeElapsed.toMillis()));
+			FPSstats.add((double) (timer.tick().toMillis()));
 		}
 
 		if (isFinished()) {
-			totalTime = Duration.between(beginning, Instant.now());
+			timer.stop();
 		}
 	}
 
@@ -115,8 +107,7 @@ public class SimulationData {
 	}
 
 	public String getETA() {
-		if (beginning == null) return "";
-		Duration elapsed = Duration.between(beginning, Instant.now());
+		Duration elapsed = timer.elapsed();
 		double msForEachIteration = (double) elapsed.toMillis() / (double) getIteration();
 		long remainingMillis = (long) (msForEachIteration * (iteration.getSteps() - iteration.getIteration()));
 		long minutes = remainingMillis / 60_000;
@@ -127,7 +118,7 @@ public class SimulationData {
 	}
 
 	public Duration getTotalTime() {
-		return totalTime;
+		return timer.getTotalTime();
 	}
 
 	public String toString() {
@@ -143,9 +134,6 @@ public class SimulationData {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		SimulationData that = (SimulationData) o;
-		if (beginning != null && !beginning.equals(that.beginning)) return false;
-		if (lastIteration != null && !lastIteration.equals(that.lastIteration)) return false;
-		if (totalTime != null && !totalTime.equals(that.totalTime)) return false;
 		return nThreads == that.nThreads &&
 				Double.compare(that.dt, dt) == 0 &&
 				Double.compare(that.vt, vt) == 0 &&
@@ -157,6 +145,6 @@ public class SimulationData {
 	}
 
 	public int hashCode() {
-		return Objects.hash(nThreads, bodies, bounds, dt, iteration, pause, FPSstats, vt, beginning, lastIteration, totalTime);
+		return Objects.hash(nThreads, bodies, bounds, dt, iteration, pause, FPSstats, vt, timer);
 	}
 }
