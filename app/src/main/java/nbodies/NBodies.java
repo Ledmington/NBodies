@@ -17,7 +17,7 @@ import static nbodies.sim.data.SimulationDataBuilder.randomBodyIn;
  */
 public class NBodies {
 
-	private static final boolean USE_GUI = true;
+	private static final boolean USE_GUI = false;
 	private static Simulator sim;
 
 	public static void main(String[] args) {
@@ -27,21 +27,16 @@ public class NBodies {
 
 		System.out.println(Runtime.getRuntime().availableProcessors() + " cores available");
 
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		int width = (int) screenSize.getWidth();
-		int height = (int) screenSize.getHeight();
-		int size = min(width, height) - 100;
-
 		final SimulationData data;
 
 		//data = SimulationDataFactory.testBodySet4_many_bodies();
 		data = SimulationData.builder()
-				.threads(1) // uncomment to use serial
-				.numBodies(1000)
+				.threads(2) // uncomment to use serial
+				.numBodies(100)
 				.bodies(randomBodyIn(-1, 1, -1, 1))
 				.bounds(new Boundary(-6, -6, 6, 6))
 				.deltaTime(0.01)
-				.steps(10_000)
+				.steps(1_000)
 				.build();
 		//data = SimulationDataFactory.circle(100);
 
@@ -54,6 +49,10 @@ public class NBodies {
 		sim = new MultiThreadSimulator(data);
 
 		if (USE_GUI) {
+			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+			int width = (int) screenSize.getWidth();
+			int height = (int) screenSize.getHeight();
+			int size = min(width, height) - 100;
 			new SimulationView(size, size, data);
 		} else {
 			sim.execute();

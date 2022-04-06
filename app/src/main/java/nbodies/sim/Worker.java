@@ -8,8 +8,6 @@ import nbodies.utils.barrier.Barrier;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class Worker extends Thread {
 
@@ -36,9 +34,10 @@ public class Worker extends Thread {
 		final int end = bodies.size() * (id + 1) / data.getNThreads();
 
 		final List<Body> myBodies = bodies.subList(start, end);
-		final List<V2d> tmpForces = Stream.generate(() -> new V2d(0, 0))
-				.limit(myBodies.size())
-				.collect(Collectors.toList());
+		final List<V2d> tmpForces = new ArrayList<>(myBodies.size());
+		for(int i=0; i<myBodies.size(); i++) {
+			tmpForces.add(new V2d(0, 0));
+		}
 
 		while (!data.isFinished()) {
 			while (paused) {

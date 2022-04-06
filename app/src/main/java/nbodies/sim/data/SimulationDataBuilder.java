@@ -1,9 +1,6 @@
 package nbodies.sim.data;
 
-import nbodies.Body;
-import nbodies.Boundary;
-import nbodies.P2d;
-import nbodies.V2d;
+import nbodies.*;
 
 import java.util.ArrayList;
 import java.util.function.Supplier;
@@ -17,14 +14,19 @@ public class SimulationDataBuilder {
 	private long steps = 50000;
 	private int nth = Runtime.getRuntime().availableProcessors();
 
-	public static Supplier<Body> randomBodyIn(double xmin, double xmax, double ymin, double ymax) {
-		return () -> new Body(
-				new P2d(randomDouble(xmin, xmax), randomDouble(ymin, ymax)),
-				new V2d(0, 0),
-				10);
+	public static Supplier<Body> randomBodyIn(final double xmin, final double xmax, final double ymin, final double ymax) {
+		// added this ugliness to please JPF
+		return new Supplier<Body>() {
+			public Body get() {
+				final P2d pos = new P2d(randomDouble(xmin, xmax), randomDouble(ymin, ymax));
+				final V2d vel = new V2d(0, 0);
+				final double mass = 10;
+				return new Body(pos, vel, mass);
+			}
+		};
 	}
 
-	private static double randomDouble(double a, double b) {
+	private static double randomDouble(final double a, final double b) {
 		return Math.random() * (b - a) + a;
 	}
 
