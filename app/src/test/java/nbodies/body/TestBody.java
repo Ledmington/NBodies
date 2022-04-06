@@ -7,6 +7,8 @@ import nbodies.V2d;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -19,6 +21,13 @@ public class TestBody {
 
 	private Boundary bounds;
 	private Body b;
+
+	// Must do this ugliness to please JPF
+	private static <T> List<T> of(T... args) {
+		List<T> l = new LinkedList<>();
+		l.addAll(Arrays.asList(args));
+		return l;
+	}
 
 	@BeforeEach
 	public void setup() {
@@ -75,7 +84,7 @@ public class TestBody {
 
 	@Test
 	public void cornersAreInside() {
-		List<Body> corners = List.of(
+		List<Body> corners = TestBody.of(
 				body(bounds.getXMin(), bounds.getYMin()), // NW
 				body(bounds.getXMax(), bounds.getYMin()), // NE
 				body(bounds.getXMin(), bounds.getYMax()), // SW

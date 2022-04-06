@@ -2,6 +2,18 @@
 First assignment of the "Concurrent and Distributed Programming" course.
 Link to the actual assignment [here](https://docs.google.com/document/d/1B-ml9PS-QT1tR6n2N3txTTiVUJ9IpF49cORrhTrtHAQ/edit).
 
+# How to run JPF
+Run the JPF container from the root directory of the project.
+```
+docker run -v PercorsoAllacartellaDelProgetto:/home -it gianlucaaguzzi/pcd-jpf:latest /bin/bash
+```
+
+Build the project and run JPF.
+```
+./gradlew build
+java -jar $JPF app/src/main/java/nbodies/TestLiveness.jpf
+```
+
 ## PCD Assignment #01 - v 1.0-20220314
 
 Nel repository del corso (package `pcd.ass01.seq`) è fornito il codice di un programma che simula il movimento di N corpi su un piano bidimensionale, soggetti a due tipi di forze:

@@ -4,6 +4,7 @@ import nbodies.sim.MultiThreadSimulator;
 import nbodies.sim.Simulator;
 import nbodies.sim.data.SimulationData;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -32,8 +33,8 @@ public class TestTime {
 	}
 
 	public static void main(final String[] args) {
-		final List<Integer> bodies = List.of(5_000);
-		final List<Integer> steps = List.of(50_000);
+		final List<Integer> bodies = new LinkedList<>(Collections.singleton(5000)); // Must do this ugliness to please JPF
+		final List<Integer> steps = new LinkedList<>(Collections.singleton(50000)); // Must do this ugliness to please JPF
 		final int attempts = 1;
 
 		for (Integer nb : bodies) {
